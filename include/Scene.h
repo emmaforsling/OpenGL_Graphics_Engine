@@ -8,6 +8,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+// AntTweakBar
+#include <AntTweakBar.h>
+
 // Source includes
 #include "../include/Camera.h"
 #include "../include/Geometry.h"

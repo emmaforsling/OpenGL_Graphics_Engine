@@ -3,39 +3,48 @@
 #include <stdlib.h>
 #include <iostream>
 
-// Include GLEW
+// OpenGL includes
 #include <GL/glew.h>
-
-// Include GLFW
 #include <GLFW/glfw3.h>
-GLFWwindow* window;
 
-// Include GLM
+// GLM includes
 #include <glm/glm.hpp>
 using namespace glm;
 
-// Include
+// AntTweakBar includes
+#include <AntTweakBar.h>
+
+// Source includes
 #include "../include/Scene.h"
 
 // Functions
 bool initOpenGL(void);
 bool initScene(void);
+void initAntTweakBar(void);
 
 // Variables
+GLFWwindow* window;
 Scene* scene;
+TwBar* tweakbar;
+
+// Constants
+#define WIDTH 1024
+#define HEIGHT 768
 
 int main(void)
 {
-	std::cout << "Hello Me" << std::endl;
-
 	if(!initOpenGL())
 	{
 		return -1;
 	}
 
+	initAntTweakBar();
 	initScene();
 
 	scene->render(window);
+
+	// Remove AntTweakBar
+    TwTerminate();
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
@@ -88,3 +97,36 @@ bool initScene(void)
 {
 	scene = new Scene();
 }
+
+/**
+ *   Initialize the AntTweakBar window and add its variables
+**/
+void initAntTweakBar(void)
+{
+    // Scale the font, since AntTweakBar doesn't like retina displays
+    TwDefine(" GLOBAL fontscaling=2 ");
+
+    // Initialize AntTweakBar
+    TwInit(TW_OPENGL_CORE, NULL);       // for core profile
+
+    // Set the size of the graphic window
+    TwWindowSize(WIDTH * 1.96, HEIGHT * 1.96);     // for mac retina 13
+    // TwWindowSize(WIDTH * 1.99, HEIGHT * 1.99);        // for mac retina 15
+
+    // Create a new tweak bar (by calling TWNewBar) and set its size
+    tweakbar = TwNewBar("Emma");
+    TwDefine("Emma size='400 700' ");
+
+    // 
+    float testVariable = 1.0f;
+
+    /**
+    * Add variables to the tweak bar
+    **/
+    // Mesh to be rendered
+    TwAddVarRW( tweakbar,           		// my tweak bar
+            	"That's Me :)",          	// name of my variable
+            	TW_TYPE_FLOAT,      		// tweak bar type
+            	&testVariable,       		// my variable
+           		NULL );
+ }

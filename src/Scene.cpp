@@ -42,6 +42,9 @@ void Scene::render(GLFWwindow* window)
 		// Clear the screen
 		glClear( GL_COLOR_BUFFER_BIT );
 
+		// Render the AntTweakBar
+		TwDraw();
+
 		// Use our shader
 		glUseProgram(programID);
 
