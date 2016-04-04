@@ -14,10 +14,21 @@ GLFWwindow* window;
 #include <glm/glm.hpp>
 using namespace glm;
 
+// Include AntTweakBar
+#include <AntTweakBar.h>
+
 // Include
 #include "../include/utils/Shader.h"
 
 bool initOpenGL(void);
+void initAntTweakBar(void);
+
+TwBar* tweakbar;
+
+#define WIDTH 1024
+#define HEIGHT 768
+//const int WIDTH = 1024;
+//const int HEIGHT = 768;
 
 int main(void)
 {
@@ -27,6 +38,8 @@ int main(void)
 	{
 		return -1;
 	}
+
+	initAntTweakBar();
 
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -53,6 +66,9 @@ int main(void)
 
 		// Clear the screen
 		glClear( GL_COLOR_BUFFER_BIT );
+
+		// Render the AntTweakBar
+		TwDraw();
 
 		// Use our shader
 		glUseProgram(programID);
@@ -86,6 +102,9 @@ int main(void)
 	glDeleteBuffers(1, &vertexbuffer);
 	glDeleteVertexArrays(1, &VertexArrayID);
 	glDeleteProgram(programID);
+
+	// Remove AntTweakBar
+    TwTerminate();
 
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
@@ -133,3 +152,40 @@ bool initOpenGL(void)
 
 	return true;
 }
+
+
+/**
+ *   Initialize the AntTweakBar window and add its variables
+**/
+void initAntTweakBar(void)
+{
+    // Scale the font, since AntTweakBar doesn't like retina displays
+    TwDefine(" GLOBAL fontscaling=2 ");
+
+    // Initialize AntTweakBar
+    TwInit(TW_OPENGL_CORE, NULL);       // for core profile
+
+    // Set the size of the graphic window
+    // TwWindowSize(WIDTH * 1.96, HEIGHT * 1.96);     // for mac retina 13
+    TwWindowSize(WIDTH * 1.99, HEIGHT * 1.99);        // for mac retina 15
+
+    // Create a new tweak bar (by calling TWNewBar) and set its size
+    tweakbar = TwNewBar("Emma");
+    TwDefine("Emma size='400 700' ");
+
+    // 
+    float testVariable = 1.0f;
+
+    /**
+    * Add variables to the tweak bar
+    **/
+    // Mesh to be rendered
+    TwAddVarRW(
+            tweakbar,           		// my tweak bar
+            "That's Me :)",          	// name of my variable
+            TW_TYPE_FLOAT,      		// tweak bar type
+            &testVariable,       		// my variable
+            NULL
+        );
+
+ }
