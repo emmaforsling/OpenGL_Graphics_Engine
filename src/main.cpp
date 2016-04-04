@@ -22,6 +22,10 @@ bool initOpenGL(void);
 bool initScene(void);
 void initAntTweakBar(void);
 
+// Controls
+void mouseButton(GLFWwindow *, int, int, int);
+void myFunction(void *clientData);
+
 // Variables
 GLFWwindow* window;
 Scene* scene;
@@ -37,11 +41,15 @@ int main(void)
 	{
 		return -1;
 	}
+	// Directly after GLFW initialization, redirect GLFW events to AntTweakBar
+    glfwSetMouseButtonCallback(window, mouseButton);
 
 	initAntTweakBar();
 	initScene();
 
 	scene->render(window);
+	// Render the AntTweakBar
+		TwDraw();
 
 	// Remove AntTweakBar
     TwTerminate();
@@ -98,6 +106,11 @@ bool initScene(void)
 	scene = new Scene();
 }
 
+void myFunction(void *clientData){
+	std::cout << "Hej på mig igen " << std::endl;	
+}
+
+float testVariable = 10.0f;
 /**
  *   Initialize the AntTweakBar window and add its variables
 **/
@@ -115,18 +128,57 @@ void initAntTweakBar(void)
 
     // Create a new tweak bar (by calling TWNewBar) and set its size
     tweakbar = TwNewBar("Emma");
-    TwDefine("Emma size='400 700' ");
+    TwDefine("Emma size='400 700'");
 
-    // 
-    float testVariable = 1.0f;
 
     /**
     * Add variables to the tweak bar
     **/
-    // Mesh to be rendered
     TwAddVarRW( tweakbar,           		// my tweak bar
             	"That's Me :)",          	// name of my variable
             	TW_TYPE_FLOAT,      		// tweak bar type
             	&testVariable,       		// my variable
-           		NULL );
+           		"min=0 max=2 step=0.05 help='är en man'" 
+           		);
+
+    TwAddVarRW( tweakbar,           		// my tweak bar
+            	"Martin",        			// name of my variable
+            	TW_TYPE_FLOAT,      		// tweak bar type
+            	&testVariable,       		// my variable
+           		" group='Stockholm' label='Martin' min=0 max=2 step=0.05 help='är en man' "
+           		);
+
+    TwAddButton( tweakbar, 
+    			 "comment1",
+    			 myFunction,
+    			 NULL,
+    			 " label='Life is like a box a chocolates' "
+    			 );
  }
+
+void updateAntTweakBar(){
+
+}
+
+/**
+*	Function MouseButton that retrieves the clicked position
+**/
+void mouseButton(GLFWwindow* window, int button, int action, int mods){
+ 	if(!TwEventMouseButtonGLFW(button, action)) {
+ 		if(button != GLFW_MOUSE_BUTTON_LEFT)
+            return;
+        
+        switch(action) {
+
+            case GLFW_PRESS:
+                double x, y;
+                glfwGetCursorPos(window, &x, &y);
+                std::cout << "Clicked position = (" << x << "," << y << ")" << std::endl;
+                break;
+
+            default:
+                
+                break;
+        }
+ 	}
+}
