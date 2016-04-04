@@ -15,7 +15,7 @@ out vec3 normal;
 out vec2 uv;
 
 void main() {
-	gl_Position = MVP * vec4(vertexPos_ws, 1.0);
+	gl_Position = vec4(vertexPos_ws, 1.0);
 	uv = uvCoordinates;
 	normal = vec3(transpose(inverse(V * M)) * vec4(vertexNormal_ws, 1.0));
 }
