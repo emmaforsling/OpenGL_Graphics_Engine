@@ -15,6 +15,7 @@
 #include "../include/Camera.h"
 #include "../include/Geometry.h"
 #include "../include/utils/Shader.h"
+#include "../include/utils/controls.h"
 
 class Scene{
 public:
@@ -32,6 +33,7 @@ private:
 	Camera* camera;
 	std::vector<Geometry *> geometries;
 	GLuint programID;
+	GLuint MatrixID;
 };
 
 #endif
