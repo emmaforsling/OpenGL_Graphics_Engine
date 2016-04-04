@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-
+// GLM includes
 #include <glm/glm.hpp>
 
 class Camera{
