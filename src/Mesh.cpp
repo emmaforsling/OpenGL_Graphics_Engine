@@ -58,8 +58,8 @@ void Mesh::initCube(float size)
 	vertices[34] = glm::vec3(-size,  size,  size);
 	vertices[35] = glm::vec3( size, -size,  size);
 
-	glGenVertexArrays(1, &vertexArrayID);
-	glBindVertexArray(vertexArrayID);
+	//glGenVertexArrays(1, &vertexArrayID);
+	//glBindVertexArray(vertexArrayID);
   
   	glGenBuffers(1, &vertexbuffer);
   	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -74,11 +74,17 @@ void Mesh::initOBJ(const char* filename)
 	// Read our .obj file
 	bool res = loadObj(filename, vertices, uvs, normals);
 	
+	// Vertices
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
+	// Normals
+	glGenBuffers(1, &normalBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 	
+	// UVs
 	glGenBuffers(1, &uvbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);	
@@ -90,10 +96,10 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
     // This function was originally written by David Grayson for
     // https://github.com/DavidEGrayson/ahrs-visualizer
 
-	// header (to check if it is a png)
+	// Header (to check if it is a png)
     png_byte header[8];
 
-    // open file as binary
+    // Open file as binary
     FILE *fp = fopen(file_name, "rb");
     if (fp == 0)
     {
@@ -101,10 +107,10 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
         return 0;
     }
 
-    // read the header
+    // Read the header
     fread(header, 1, 8, fp);
 
-    // test if it is a png
+    // Test if it is a png
     if (png_sig_cmp(header, 0, 8))
     {
         std::cout << "error:" << file_name << "is not a PNG." << std::endl;
@@ -112,7 +118,7 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
         return 0;
     }
 
-    // create a png struct
+    // create png struct
     png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
@@ -125,7 +131,7 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
     {
-        fprintf(stderr, "error: png_create_info_struct returned 0.\n");
+        std::cout << "error: png_create_info_struct returned 0" << std::endl;
         png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
         fclose(fp);
         return 0;
@@ -135,7 +141,7 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info)
     {
-        fprintf(stderr, "error: png_create_info_struct returned 0.\n");
+        std::cout <<  "error: png_create_info_struct returned 0." << std::endl;
         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
         fclose(fp);
         return 0;
@@ -143,7 +149,7 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
 
     // the code in this if statement gets called if libpng encounters an error
     if (setjmp(png_jmpbuf(png_ptr))) {
-        fprintf(stderr, "error from libpng\n");
+        std::cout << "error from libpng" << std::endl;
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         fclose(fp);
         return 0;
@@ -173,7 +179,7 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
 
     if (bit_depth != 8)
     {
-        fprintf(stderr, "%s: Unsupported bit depth %d.  Must be 8.\n", file_name, bit_depth);
+        std::cout << file_name << "Unsupported bit depth." << bit_depth << "Must be 8." << std::endl;
         return 0;
     }
 
@@ -187,7 +193,7 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
         format = GL_RGBA;
         break;
     default:
-        fprintf(stderr, "%s: Unknown libpng color type %d.\n", file_name, color_type);
+        std::cout << file_name << " Unknown libpng color type "<< color_type << std::endl;
         return 0;
     }
 
@@ -204,7 +210,7 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
     png_byte * image_data = (png_byte *)malloc(rowbytes * temp_height * sizeof(png_byte)+15);
     if (image_data == NULL)
     {
-        fprintf(stderr, "error: could not allocate memory for PNG image data\n");
+        std::cout << "error: could not allocate memory for PNG image data" << std::endl;
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         fclose(fp);
         return 0;
@@ -214,7 +220,7 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
     png_byte ** row_pointers = (png_byte **)malloc(temp_height * sizeof(png_byte *));
     if (row_pointers == NULL)
     {
-        fprintf(stderr, "error: could not allocate memory for PNG row pointers\n");
+        std::cout << "error: could not allocate memory for PNG row pointers" << std::endl;
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         free(image_data);
         fclose(fp);
@@ -245,15 +251,4 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
     fclose(fp);
     
     return texture;
-}
-
-
-GLuint Mesh::getVertexArrayID()
-{
-	return vertexArrayID;
-}
-
-GLuint Mesh::getVertexbuffer()
-{
-	return vertexbuffer;
 }

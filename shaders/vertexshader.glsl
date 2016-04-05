@@ -2,8 +2,8 @@
 
 // Input 
 layout(location = 0) in vec3 vertexPos_ms;
-layout(location = 1) in vec2 uvCoordinates;
-layout(location = 2) in vec3 vertexNormal_ms;
+layout(location = 1) in vec3 vertexNormal_ms;
+layout(location = 2) in vec2 uvCoordinates;
 
 uniform mat4 MVP;
 uniform mat4 M;

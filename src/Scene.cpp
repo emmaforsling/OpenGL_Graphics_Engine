@@ -17,14 +17,19 @@ Scene::Scene()
 
 	meshes = std::vector<Mesh*>();
 
-	// Load the texture
-	Texture = loadDDS("assets/textures/uvmap.DDS");
-	// Get a handle for our "myTextureSampler" uniform
-	TextureID  = glGetUniformLocation(programID, "myTextureSampler");
 
 	Mesh* tempMesh = new Mesh();
 	// tempMesh->initCube(1.0f);
-	tempMesh->initOBJ("assets/bunny.obj");
+	tempMesh->initOBJ("assets/susanne.obj");
+
+	int texHeight = 512;
+	int texWidth  = 512;
+	// Load the texture
+	Texture = tempMesh->png_texture_load("assets/textures/monkey_tex.png", &texWidth , &texHeight);
+	// Texture = loadDDS("assets/textures/uvmap.DDS");
+	// Get a handle for our "myTextureSampler" uniform
+	TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+
 
 	meshes.push_back(tempMesh);
 
@@ -77,11 +82,7 @@ void Scene::render(GLFWwindow* window)
 		// in the "MVP" uniform
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
-		// Bind our texture in Texture Unit 0
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, Texture);
-		// Set our "myTextureSampler" sampler to user Texture Unit 0
-		glUniform1i(TextureID, 0);
+		glUniform1i(TextureID, Texture);
 
 		// 1st attribute buffer : vertices
 		glEnableVertexAttribArray(0);
@@ -95,12 +96,24 @@ void Scene::render(GLFWwindow* window)
 			(void*)0            // array buffer offset
 		);
 
+		// 2nd attribute buffer : normals
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getNormalBuffer());
+		glVertexAttribPointer(
+			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_TRUE,            // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+
 		if(meshes.at(0)->getUvBuffer()){
-			// 2nd attribute buffer : UVs
+			// 3rd attribute buffer : UVs
 			glEnableVertexAttribArray(1);
 			glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getUvBuffer());
 			glVertexAttribPointer(
-				1,                                // attribute
+				2,                                // attribute
 				2,                                // size
 				GL_FLOAT,                         // type
 				GL_FALSE,                         // normalized?
