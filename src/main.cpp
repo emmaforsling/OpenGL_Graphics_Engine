@@ -78,7 +78,7 @@ bool initOpenGL(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	window = glfwCreateWindow( 1024, 768, "Tutorial 02 - Red triangle", NULL, NULL);
+	window = glfwCreateWindow( 1024, 768, "Projekt okänt", NULL, NULL);
 	if( window == NULL ){
 		fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
 		getchar();
@@ -133,10 +133,10 @@ void initAntTweakBar(void)
     * Add variables to the tweak bar
     **/
     TwAddVarRW( tweakbar,           		// my tweak bar
-            	"That's Me :)",          	// name of my variable
+            	"That's Me",          	// name of my variable
             	TW_TYPE_FLOAT,      		// tweak bar type
             	&testVariable,       		// my variable
-           		"min=0 max=2 step=0.05 help='är en man'" 
+           		"min=0 max=2 step=0.05 help=':D'" 
            		);
 
     TwAddVarRW( tweakbar,           		// my tweak bar

@@ -2,20 +2,20 @@
 
 Mesh::Mesh()
 {
-	
+		
 }
 
 Mesh::~Mesh()
 {
 	// Cleanup VBO
 	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteVertexArrays(1, &vertexArrayID);
 }
 
 void Mesh::initCube()
 {
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
+	glGenVertexArrays(1, &vertexArrayID);
+	glBindVertexArray(vertexArrayID);
 	
 	// Our vertices. Tree consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
 	// A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
@@ -63,14 +63,14 @@ void Mesh::initCube()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 }
 
-void Mesh::initOBJ()
+void Mesh::initOBJ(std::string filename)
 {
-	
+
 }
 
 GLuint Mesh::getVertexArrayID()
 {
-	return VertexArrayID;
+	return vertexArrayID;
 }
 
 GLuint Mesh::getVertexbuffer()

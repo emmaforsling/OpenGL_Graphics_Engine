@@ -24,7 +24,7 @@ public:
 	GLuint getVertexbuffer();
 
 private:		
-	GLuint VertexArrayID;
+	GLuint vertexArrayID;
 	GLuint vertexbuffer;
 };
 
