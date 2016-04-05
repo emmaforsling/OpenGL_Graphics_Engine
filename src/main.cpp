@@ -23,7 +23,8 @@ bool initScene(void);
 void initAntTweakBar(void);
 
 // Controls
-void mouseButton(GLFWwindow *, int, int, int);
+void mouseButtonMagic(GLFWwindow *, int, int, int);
+void mouseMotionMagic(GLFWwindow *, double, double);
 void myFunction(void *clientData);
 
 // Variables
@@ -41,15 +42,15 @@ int main(void)
 	{
 		return -1;
 	}
-	// Directly after GLFW initialization, redirect GLFW events to AntTweakBar
-    glfwSetMouseButtonCallback(window, mouseButton);
-
-	initAntTweakBar();
+	
+	// Initialize the scene
 	initScene();
 
+	// Initialize the AntTweakBar window 
+	initAntTweakBar();
+
+	// Render the window
 	scene->render(window);
-	// Render the AntTweakBar
-		TwDraw();
 
 	// Remove AntTweakBar
     TwTerminate();
@@ -86,6 +87,9 @@ bool initOpenGL(void)
 	}
 	glfwMakeContextCurrent(window);
 
+	// Ensure we can capture the escape key being pressed below
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
 	// Initialize GLEW
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) {
@@ -95,15 +99,6 @@ bool initOpenGL(void)
 		return false;
 	}
 
-	// Ensure we can capture the escape key being pressed below
-	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-	// Hide the mouse and enable unlimited mouvement
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	// Set the mouse at the center of the screen
-    glfwPollEvents();
-    glfwSetCursorPos(window, 1024/2, 768/2);
-
 	return true;
 }
 
@@ -112,9 +107,7 @@ bool initScene(void)
 	scene = new Scene();
 }
 
-void myFunction(void *clientData){
-	std::cout << "Hej på mig igen " << std::endl;	
-}
+/****************************** <AntTweakBar> *********************************/
 
 float testVariable = 10.0f;
 /**
@@ -128,14 +121,13 @@ void initAntTweakBar(void)
     // Initialize AntTweakBar
     TwInit(TW_OPENGL_CORE, NULL);       // for core profile
 
-    // Set the size of the graphic window
-    TwWindowSize(WIDTH * 1.96, HEIGHT * 1.96);     // for mac retina 13
-    // TwWindowSize(WIDTH * 1.99, HEIGHT * 1.99);        // for mac retina 15
+    // // Set the size of the graphic window
+    // TwWindowSize(WIDTH * 1.96, HEIGHT * 1.96);     // for mac retina 13
+    TwWindowSize(WIDTH * 1.99, HEIGHT * 1.99);        // for mac retina 15
 
-    // Create a new tweak bar (by calling TWNewBar) and set its size
+    // // Create a new tweak bar (by calling TWNewBar) and set its size
     tweakbar = TwNewBar("Emma");
     TwDefine("Emma size='400 700'");
-
 
     /**
     * Add variables to the tweak bar
@@ -151,40 +143,35 @@ void initAntTweakBar(void)
             	"Martin",        			// name of my variable
             	TW_TYPE_FLOAT,      		// tweak bar type
             	&testVariable,       		// my variable
-           		" group='Stockholm' label='Martin' min=0 max=2 step=0.05 help='är en man' "
+           		" group='Stockholm' label='Martin' min=0 max=2 step=0.05 help='man' "
            		);
 
     TwAddButton( tweakbar, 
     			 "comment1",
-    			 myFunction,
+    			 &myFunction,
     			 NULL,
     			 " label='Life is like a box a chocolates' "
-    			 );
- }
+    			 ); 
+	
+	glfwSetMouseButtonCallback(window, mouseButtonMagic);
+    glfwSetCursorPosCallback(window, mouseMotionMagic);
 
-void updateAntTweakBar(){
+}
 
+void myFunction(void *clientData){
+	std::cout << "Hej på mig igen " << std::endl;	
 }
 
 /**
 *	Function MouseButton that retrieves the clicked position
 **/
-void mouseButton(GLFWwindow* window, int button, int action, int mods){
- 	if(!TwEventMouseButtonGLFW(button, action)) {
- 		if(button != GLFW_MOUSE_BUTTON_LEFT)
-            return;
-        
-        switch(action) {
-
-            case GLFW_PRESS:
-                double x, y;
-                glfwGetCursorPos(window, &x, &y);
-                std::cout << "Clicked position = (" << x << "," << y << ")" << std::endl;
-                break;
-
-            default:
-                
-                break;
-        }
- 	}
+void mouseButtonMagic(GLFWwindow* window, int button, int action, int mods){
+ 	
+ 	TwEventMouseButtonGLFW(button, action);
 }
+
+void mouseMotionMagic(GLFWwindow * window, double x, double y) {
+    TwEventMousePosGLFW(x * 2, y * 2);
+}
+
+/****************************** </AntTweakBar> *********************************/
