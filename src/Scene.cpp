@@ -85,7 +85,7 @@ void Scene::render(GLFWwindow* window)
 		);
 
 		// 2nd attribute buffer : normals
-		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getNormalBuffer());
 		glVertexAttribPointer(
 			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
@@ -98,7 +98,7 @@ void Scene::render(GLFWwindow* window)
 
 		if(meshes.at(0)->getUvBuffer()){
 			// 3rd attribute buffer : UVs
-			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(2);
 			glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getUvBuffer());
 			glVertexAttribPointer(
 				2,                                // attribute
