@@ -2,6 +2,18 @@
 
 Mesh::Mesh()
 {
+	
+}
+
+Mesh::~Mesh()
+{
+	// Cleanup VBO
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
+}
+
+void Mesh::initCube()
+{
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 	
@@ -51,11 +63,9 @@ Mesh::Mesh()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 }
 
-Mesh::~Mesh()
+void Mesh::initOBJ()
 {
-	// Cleanup VBO
-	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteVertexArrays(1, &VertexArrayID);
+	
 }
 
 GLuint Mesh::getVertexArrayID()

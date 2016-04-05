@@ -18,6 +18,7 @@ Scene::Scene()
 	meshes = std::vector<Mesh*>();
 
 	Mesh* tempMesh = new Mesh();
+	tempMesh->initCube();
 	meshes.push_back(tempMesh);
 
 	// Create and compile our GLSL program from the shaders

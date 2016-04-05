@@ -15,6 +15,11 @@ public:
 	// Destructor
 	~Mesh();
 
+	// Init functions
+	void initCube();
+	void initOBJ(std::string filename);
+
+	// Get functions
 	GLuint getVertexArrayID();
 	GLuint getVertexbuffer();
 
