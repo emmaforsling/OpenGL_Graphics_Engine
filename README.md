@@ -1,5 +1,6 @@
 # TSBK03
 
+This application is compiled and tested only on OSX.
 
 Links:
 * OpenGL tutorials: http://www.opengl-tutorial.org/
