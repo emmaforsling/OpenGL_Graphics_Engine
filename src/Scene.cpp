@@ -18,8 +18,8 @@ Scene::Scene()
 	meshes = std::vector<Mesh*>();
 
 	Mesh* tempMesh = new Mesh();
-	tempMesh->initCube(1.0f);
-	// tempMesh->initOBJ("assets/bunny.obj");
+	// tempMesh->initCube(1.0f);
+	tempMesh->initOBJ("assets/bunny.obj");
 
 	meshes.push_back(tempMesh);
 
@@ -99,8 +99,8 @@ void Scene::render(GLFWwindow* window)
 		}
 
 		// Draw the triangles!
-		 glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
-		// glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
+		// glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
+		glDrawArrays(GL_TRIANGLES, 0, meshes.at(0)->getVerticesLength() );
 
 		glDisableVertexAttribArray(0);
 

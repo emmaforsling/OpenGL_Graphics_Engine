@@ -30,8 +30,8 @@ public:
 	// Get functions
 	GLuint getVertexArrayID();
 	GLuint getVertexbuffer();
-
-	GLuint getUvBuffer(){return uvbuffer;};
+	GLuint getUvBuffer(){ return uvbuffer; };
+	int getVerticesLength(){ return vertices.size(); };
 
 private:		
 	// OpenGL handles 		
