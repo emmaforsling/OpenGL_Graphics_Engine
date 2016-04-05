@@ -22,6 +22,11 @@ bool initOpenGL(void);
 bool initScene(void);
 void initAntTweakBar(void);
 
+// Controls
+void magicTwMouseButtonWrapper(GLFWwindow *, int, int, int);
+void magicTwMouseHoverWrapper(GLFWwindow *, double, double);
+void myFunction(void *clientData);
+
 // Variables
 GLFWwindow* window;
 Scene* scene;
@@ -37,10 +42,14 @@ int main(void)
 	{
 		return -1;
 	}
-
-	initAntTweakBar();
+	
+	// Initialize the scene
 	initScene();
 
+	// Initialize the AntTweakBar window 
+	initAntTweakBar();
+
+	// Render the window
 	scene->render(window);
 
 	// Remove AntTweakBar
@@ -78,6 +87,9 @@ bool initOpenGL(void)
 	}
 	glfwMakeContextCurrent(window);
 
+	// Ensure we can capture the escape key being pressed below
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
 	// Initialize GLEW
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) {
@@ -87,15 +99,6 @@ bool initOpenGL(void)
 		return false;
 	}
 
-	// Ensure we can capture the escape key being pressed below
-	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-	// Hide the mouse and enable unlimited mouvement
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	// Set the mouse at the center of the screen
-    glfwPollEvents();
-    glfwSetCursorPos(window, 1024/2, 768/2);
-
 	return true;
 }
 
@@ -104,6 +107,9 @@ bool initScene(void)
 	scene = new Scene();
 }
 
+/****************************** <AntTweakBar> *********************************/
+
+float testVariable = 10.0f;
 /**
  *   Initialize the AntTweakBar window and add its variables
 **/
@@ -119,12 +125,9 @@ void initAntTweakBar(void)
     TwWindowSize(WIDTH * 1.96, HEIGHT * 1.96);			// for mac retina 13
     // TwWindowSize(WIDTH * 1.99, HEIGHT * 1.99);			// for mac retina 15
 
-    // Create a new tweak bar (by calling TWNewBar) and set its size
+    // // Create a new tweak bar (by calling TWNewBar) and set its size
     tweakbar = TwNewBar("Emma");
-    TwDefine("Emma size='400 700' ");
-
-    // 
-    float testVariable = 1.0f;
+    TwDefine("Emma size='400 700'");
 
     /**
     * Add variables to the tweak bar
@@ -133,5 +136,38 @@ void initAntTweakBar(void)
             	"That's Me :)",          	// name of my variable
             	TW_TYPE_FLOAT,      		// tweak bar type
             	&testVariable,       		// my variable
-           		NULL );
- }
+           		"min=0 max=2 step=0.05 help='är en man'" 
+           		);
+
+    TwAddVarRW( tweakbar,           		// my tweak bar
+            	"Martin",        			// name of my variable
+            	TW_TYPE_FLOAT,      		// tweak bar type
+            	&testVariable,       		// my variable
+           		" group='Stockholm' label='Martin' min=0 max=2 step=0.05 help='man' "
+           		);
+
+    TwAddButton( tweakbar, 
+    			 "comment1",
+    			 &myFunction,
+    			 NULL,
+    			 " label='Life is like a box a chocolates' "
+    			 ); 
+	
+	glfwSetMouseButtonCallback(window, magicTwMouseButtonWrapper);
+    glfwSetCursorPosCallback(window, magicTwMouseHoverWrapper);
+
+}
+
+void myFunction(void *clientData){
+	std::cout << "Hej på mig igen " << std::endl;	
+}
+
+void magicTwMouseButtonWrapper(GLFWwindow* window, int button, int action, int mods){
+ 	TwEventMouseButtonGLFW(button, action);
+}
+
+void magicTwMouseHoverWrapper(GLFWwindow * window, double x, double y) {
+    TwEventMousePosGLFW(x * 2, y * 2);
+}
+
+/****************************** </AntTweakBar> *********************************/

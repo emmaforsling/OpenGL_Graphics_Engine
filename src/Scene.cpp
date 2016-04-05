@@ -55,9 +55,6 @@ void Scene::render(GLFWwindow* window)
 		// Clear the screen and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Render the AntTweakBar
-		TwDraw();
-
 		// Use our shader
 		glUseProgram(programID);
 
@@ -88,6 +85,9 @@ void Scene::render(GLFWwindow* window)
 		glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
 
 		glDisableVertexAttribArray(0);
+
+		// Render the AntTweakBar
+		TwDraw();
 
 		// Swap buffers
 		glfwSwapBuffers(window);
