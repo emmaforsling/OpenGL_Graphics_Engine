@@ -3,10 +3,14 @@
 
 // Standard includes
 #include <iostream>
+#include <vector>
 
 // OpenGL includes
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+// Source includes
+#include "utils/ObjectLoader.h"
 
 class Mesh{
 public:	
@@ -17,15 +21,24 @@ public:
 
 	// Init functions
 	void initCube();
-	void initOBJ(std::string filename);
+	void initOBJ(const char* filename);
 
 	// Get functions
 	GLuint getVertexArrayID();
 	GLuint getVertexbuffer();
 
+	GLuint getUvBuffer(){return uvbuffer;};
+
 private:		
 	GLuint vertexArrayID;
 	GLuint vertexbuffer;
+
+	// For loaded OBJ's
+	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec2> uvs;
+	std::vector<glm::vec3> normals;
+
+	GLuint uvbuffer;
 };
 
 #endif

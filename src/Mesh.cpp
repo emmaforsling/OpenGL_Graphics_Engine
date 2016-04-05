@@ -9,6 +9,10 @@ Mesh::~Mesh()
 {
 	// Cleanup VBO
 	glDeleteBuffers(1, &vertexbuffer);
+	if(uvbuffer){
+		glDeleteBuffers(1, &uvbuffer);
+	}
+
 	glDeleteVertexArrays(1, &vertexArrayID);
 }
 
@@ -63,8 +67,19 @@ void Mesh::initCube()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 }
 
-void Mesh::initOBJ(std::string filename)
+void Mesh::initOBJ(const char* filename)
 {
+	// Read our .obj file
+	bool res = loadObj(filename, vertices, uvs, normals);
+	
+	glGenBuffers(1, &vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+
+	
+	glGenBuffers(1, &uvbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);	
 
 }
 

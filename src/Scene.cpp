@@ -19,6 +19,7 @@ Scene::Scene()
 
 	Mesh* tempMesh = new Mesh();
 	tempMesh->initCube();
+	// tempMesh->initOBJ("assets/bunny.obj");
 	meshes.push_back(tempMesh);
 
 	// Create and compile our GLSL program from the shaders
@@ -82,8 +83,23 @@ void Scene::render(GLFWwindow* window)
 			(void*)0            // array buffer offset
 		);
 
+		if(meshes.at(0)->getUvBuffer()){
+			// 2nd attribute buffer : UVs
+			glEnableVertexAttribArray(1);
+			glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getUvBuffer());
+			glVertexAttribPointer(
+				1,                                // attribute
+				2,                                // size
+				GL_FLOAT,                         // type
+				GL_FALSE,                         // normalized?
+				0,                                // stride
+				(void*)0                          // array buffer offset
+			);
+		}
+
 		// Draw the triangles!
-		glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
+		 glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
+		// glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
 
 		glDisableVertexAttribArray(0);
 
