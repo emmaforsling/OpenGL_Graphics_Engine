@@ -12,6 +12,10 @@
 // Source includes
 #include "utils/ObjectLoader.h"
 
+// GLM includes
+#include <glm/glm.hpp>
+
+
 class Mesh{
 public:	
 	// Constructor
@@ -20,7 +24,7 @@ public:
 	~Mesh();
 
 	// Init functions
-	void initCube();
+	void initCube(float size);
 	void initOBJ(const char* filename);
 
 	// Get functions
@@ -30,6 +34,7 @@ public:
 	GLuint getUvBuffer(){return uvbuffer;};
 
 private:		
+	// OpenGL handles 		
 	GLuint vertexArrayID;
 	GLuint vertexbuffer;
 

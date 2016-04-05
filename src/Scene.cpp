@@ -18,8 +18,9 @@ Scene::Scene()
 	meshes = std::vector<Mesh*>();
 
 	Mesh* tempMesh = new Mesh();
-	tempMesh->initCube();
+	tempMesh->initCube(1.0f);
 	// tempMesh->initOBJ("assets/bunny.obj");
+
 	meshes.push_back(tempMesh);
 
 	// Create and compile our GLSL program from the shaders
