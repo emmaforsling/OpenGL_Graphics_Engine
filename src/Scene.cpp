@@ -17,6 +17,11 @@ Scene::Scene()
 
 	meshes = std::vector<Mesh*>();
 
+	// Load the texture
+	Texture = loadDDS("assets/textures/uvmap.DDS");
+	// Get a handle for our "myTextureSampler" uniform
+	TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+
 	Mesh* tempMesh = new Mesh();
 	// tempMesh->initCube(1.0f);
 	tempMesh->initOBJ("assets/bunny.obj");
@@ -71,6 +76,12 @@ void Scene::render(GLFWwindow* window)
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+
+		// Bind our texture in Texture Unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, Texture);
+		// Set our "myTextureSampler" sampler to user Texture Unit 0
+		glUniform1i(TextureID, 0);
 
 		// 1st attribute buffer : vertices
 		glEnableVertexAttribArray(0);
