@@ -23,8 +23,8 @@ bool initScene(void);
 void initAntTweakBar(void);
 
 // Controls
-void mouseButtonMagic(GLFWwindow *, int, int, int);
-void mouseMotionMagic(GLFWwindow *, double, double);
+void magicTwMouseButtonWrapper(GLFWwindow *, int, int, int);
+void magicTwMouseHoverWrapper(GLFWwindow *, double, double);
 void myFunction(void *clientData);
 
 // Variables
@@ -153,8 +153,8 @@ void initAntTweakBar(void)
     			 " label='Life is like a box a chocolates' "
     			 ); 
 	
-	glfwSetMouseButtonCallback(window, mouseButtonMagic);
-    glfwSetCursorPosCallback(window, mouseMotionMagic);
+	glfwSetMouseButtonCallback(window, magicTwMouseButtonWrapper);
+    glfwSetCursorPosCallback(window, magicTwMouseHoverWrapper);
 
 }
 
@@ -162,15 +162,11 @@ void myFunction(void *clientData){
 	std::cout << "Hej på mig igen " << std::endl;	
 }
 
-/**
-*	Function MouseButton that retrieves the clicked position
-**/
-void mouseButtonMagic(GLFWwindow* window, int button, int action, int mods){
- 	
+void magicTwMouseButtonWrapper(GLFWwindow* window, int button, int action, int mods){
  	TwEventMouseButtonGLFW(button, action);
 }
 
-void mouseMotionMagic(GLFWwindow * window, double x, double y) {
+void magicTwMouseHoverWrapper(GLFWwindow * window, double x, double y) {
     TwEventMousePosGLFW(x * 2, y * 2);
 }
 
