@@ -8,17 +8,17 @@ Scene::Scene()
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	// Enable depth test
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
-	//glDepthFunc(GL_LESS); 
+	glDepthFunc(GL_LESS);
 
 	// Cull triangles which normal is not towards the camera
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
-	geometries = std::vector<Geometry*>();
+	meshes = std::vector<Mesh*>();
 
-	Geometry* tempGeom = new Geometry();
-	geometries.push_back(tempGeom);
+	Mesh* tempMesh = new Mesh();
+	meshes.push_back(tempMesh);
 
 	// Create and compile our GLSL program from the shaders
 	programID = LoadShaders( "shaders/vertexshader.glsl", "shaders/fragmentshader.glsl" );
@@ -29,31 +29,31 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	for(int i = 0; i < geometries.size(); ++i)
+	for(int i = 0; i < meshes.size(); ++i)
 	{
-		if(geometries[i])
+		if(meshes[i])
 		{
-			delete geometries[i];
+			delete meshes[i];
 		}
 	}
 	
-	std::cout << "Geometries deleted" << std::endl;
+	std::cout << "meshes deleted" << std::endl;
 	
 	// Close OpenGL window
 	glDeleteProgram(programID);
 }
 
-std::vector<Geometry*> Scene::getGeometries()
+std::vector<Mesh*> Scene::getMeshes()
 {
-	return geometries;
+	return meshes;
 }
 
 void Scene::render(GLFWwindow* window)
 {
 	do
 	{
-		// Clear the screen
-		glClear( GL_COLOR_BUFFER_BIT );
+		// Clear the screen and depth buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Use our shader
 		glUseProgram(programID);
@@ -71,7 +71,7 @@ void Scene::render(GLFWwindow* window)
 
 		// 1st attribute buffer : vertices
 		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, geometries.at(0)->getVertexbuffer());
+		glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getVertexbuffer());
 		glVertexAttribPointer(
 			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 			3,                  // size
