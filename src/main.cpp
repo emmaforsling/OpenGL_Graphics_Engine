@@ -116,8 +116,8 @@ void initAntTweakBar(void)
     TwInit(TW_OPENGL_CORE, NULL);       // for core profile
 
     // Set the size of the graphic window
-    TwWindowSize(WIDTH * 1.96, HEIGHT * 1.96);     // for mac retina 13
-    // TwWindowSize(WIDTH * 1.99, HEIGHT * 1.99);        // for mac retina 15
+    TwWindowSize(WIDTH * 1.96, HEIGHT * 1.96);			// for mac retina 13
+    // TwWindowSize(WIDTH * 1.99, HEIGHT * 1.99);			// for mac retina 15
 
     // Create a new tweak bar (by calling TWNewBar) and set its size
     tweakbar = TwNewBar("Emma");

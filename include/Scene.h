@@ -13,7 +13,7 @@
 
 // Source includes
 #include "../include/Camera.h"
-#include "../include/Geometry.h"
+#include "../include/Mesh.h"
 #include "../include/utils/Shader.h"
 #include "../include/utils/controls.h"
 
@@ -27,11 +27,11 @@ public:
 	void render(GLFWwindow*);
 
 	// Get functions
-	std::vector<Geometry*> getGeometries();
+	std::vector<Mesh*> getMeshes();
 
 private:
 	Camera* camera;
-	std::vector<Geometry *> geometries;
+	std::vector<Mesh *> meshes;
 	GLuint programID;
 	GLuint MatrixID;
 };

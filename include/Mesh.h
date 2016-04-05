@@ -1,5 +1,5 @@
-#ifndef GEOMETRY_H
-#define GEOMETRY_H
+#ifndef Mesh_H
+#define Mesh_H
 
 // Standard includes
 #include <iostream>
@@ -8,12 +8,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-class Geometry{
+class Mesh{
 public:	
 	// Constructor
-	Geometry();
+	Mesh();
 	// Destructor
-	~Geometry();
+	~Mesh();
 
 	GLuint getVertexArrayID();
 	GLuint getVertexbuffer();
