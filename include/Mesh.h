@@ -30,6 +30,7 @@ public:
 	// Get functions
 	GLuint getVertexArrayID();
 	GLuint getVertexbuffer();
+	GLuint getNormalBuffer();
 	GLuint getUvBuffer(){ return uvbuffer; };
 	int getVerticesLength(){ return vertices.size(); };
 
@@ -37,6 +38,7 @@ private:
 	// OpenGL handles 		
 	GLuint vertexArrayID;
 	GLuint vertexbuffer;
+	GLuint normalBuffer;
 
 	// For loaded OBJ's
 	std::vector<glm::vec3> vertices;

@@ -5,10 +5,10 @@ in vec2 uv;
 
 out vec4 fragmentColor;
 
-vec3 lightDirection = vec3(-1.0, -1.0, 0.0);
+vec3 lightDirection = normalize(vec3(-1.0, -1.0, -1.0));
 
 void main()
 {
-	float diffuseLighting = max(0.0, dot(normal, lightDirection));
+	float diffuseLighting = max(0.0, dot(normal, -lightDirection));
     fragmentColor = diffuseLighting * vec4(1.0,1.0,1.0,1.0);
 }

@@ -84,12 +84,24 @@ void Scene::render(GLFWwindow* window)
 			(void*)0            // array buffer offset
 		);
 
+		// 2nd attribute buffer : normals
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getNormalBuffer());
+		glVertexAttribPointer(
+			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_TRUE,            // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+
 		if(meshes.at(0)->getUvBuffer()){
-			// 2nd attribute buffer : UVs
+			// 3rd attribute buffer : UVs
 			glEnableVertexAttribArray(1);
 			glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getUvBuffer());
 			glVertexAttribPointer(
-				1,                                // attribute
+				2,                                // attribute
 				2,                                // size
 				GL_FLOAT,                         // type
 				GL_FALSE,                         // normalized?

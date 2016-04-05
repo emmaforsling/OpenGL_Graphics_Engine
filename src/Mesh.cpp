@@ -58,8 +58,8 @@ void Mesh::initCube(float size)
 	vertices[34] = glm::vec3(-size,  size,  size);
 	vertices[35] = glm::vec3( size, -size,  size);
 
-	glGenVertexArrays(1, &vertexArrayID);
-	glBindVertexArray(vertexArrayID);
+	//glGenVertexArrays(1, &vertexArrayID);
+	//glBindVertexArray(vertexArrayID);
   
   	glGenBuffers(1, &vertexbuffer);
   	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -74,11 +74,17 @@ void Mesh::initOBJ(const char* filename)
 	// Read our .obj file
 	bool res = loadObj(filename, vertices, uvs, normals);
 	
+	// Vertices
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
+	// Normals
+	glGenBuffers(1, &normalBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 	
+	// UVs
 	glGenBuffers(1, &uvbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);	
@@ -93,4 +99,9 @@ GLuint Mesh::getVertexArrayID()
 GLuint Mesh::getVertexbuffer()
 {
 	return vertexbuffer;
+}
+
+GLuint Mesh::getNormalBuffer()
+{
+	return normalBuffer;
 }
