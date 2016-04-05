@@ -9,8 +9,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+// Source includes
+#include "utils/ObjectLoader.h"
+
 // GLM includes
 #include <glm/glm.hpp>
+
 
 class Mesh{
 public:	
@@ -21,20 +25,25 @@ public:
 
 	// Init functions
 	void initCube(float size);
-	void initOBJ(std::string filename);
+	void initOBJ(const char* filename);
 
 	// Get functions
 	GLuint getVertexArrayID();
 	GLuint getVertexbuffer();
+	GLuint getUvBuffer(){ return uvbuffer; };
+	int getVerticesLength(){ return vertices.size(); };
 
-private:
+private:		
 	// OpenGL handles 		
 	GLuint vertexArrayID;
 	GLuint vertexbuffer;
 
-	// Data
+	// For loaded OBJ's
 	std::vector<glm::vec3> vertices;
-    std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
+	std::vector<glm::vec3> normals;
+
+	GLuint uvbuffer;
 };
 
 #endif
