@@ -4,8 +4,14 @@ in vec3 normal_ws;
 in vec3 fragPos_ws;
 in vec2 uv;
 
+// Textures
 uniform sampler2D myTextureSampler;
+
+// Vectors
 uniform vec3 cameraPos_ws;
+
+// Scalars
+uniform float k_diff, k_spec;
 
 out vec4 fragmentColor;
 
@@ -21,10 +27,6 @@ void main() {
 	vec3 lightDirection_ws = normalize(lightPosition_ws - fragPos_ws);
 
 	// Phong shading
-
-	// Coefficients
-	float k_diff = 0.5;
-	float k_spec = 0.5;
 
 	// Diffuse light
 	float diffuseLighting = max(0.0, dot(normal_ws, lightDirection_ws));

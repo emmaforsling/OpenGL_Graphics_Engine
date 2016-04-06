@@ -41,15 +41,16 @@ public:
 	GLuint getUvBuffer(){ return uvbuffer; };
 	int getVerticesLength(){ return vertices.size(); };
 
-	// Texture functions
-	void setTexture(std::string _filename);
-	GLuint png_texture_load(const char * file_name, int * width, int * height);
-
 	// Operations
 	void setPosition(float _x, float _y, float _z);
+	void setMaterialProperties(float k_diff, float k_spec);
 
 	// Render functions
 	void render();
+
+	// Texture functions
+	void setTexture(std::string _filename);
+	GLuint png_texture_load(const char * file_name, int * width, int * height);
 
 private:		
 	// OpenGL handles 		
@@ -71,6 +72,9 @@ private:
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
 
+	// Material properties
+	float k_diff;
+	float k_spec;
 };
 
 #endif

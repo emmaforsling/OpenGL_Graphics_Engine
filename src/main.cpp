@@ -69,7 +69,7 @@ int main(void)
 bool initOpenGL(void)
 {
 	// Initialise GLFW
-	if( !glfwInit() )
+	if(!glfwInit())
 	{
 		fprintf( stderr, "Failed to initialize GLFW\n" );
 		getchar();
@@ -84,7 +84,8 @@ bool initOpenGL(void)
 
 	// Open a window and create its OpenGL context
 	window = glfwCreateWindow( 1024, 768, "Projekt okänt", NULL, NULL);
-	if( window == NULL ){
+	if( window == NULL )
+	{
 		fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
 		getchar();
 		glfwTerminate();
@@ -97,13 +98,13 @@ bool initOpenGL(void)
 
 	// Initialize GLEW
 	glewExperimental = true; // Needed for core profile
-	if (glewInit() != GLEW_OK) {
+	if(glewInit() != GLEW_OK)
+	{
 		fprintf(stderr, "Failed to initialize GLEW\n");
 		getchar();
 		glfwTerminate();
 		return false;
 	}
-
 	return true;
 }
 
@@ -116,6 +117,7 @@ bool initScene(void)
 	Mesh* tempMesh1 = new Mesh();
 	tempMesh1->initOBJ("assets/susanne.obj");
 	tempMesh1->setTexture("assets/textures/monkey_tex.png");
+	tempMesh1->setMaterialProperties(0.85, 0.15);	// diffuse and specular coefficients
 	tempMesh1->setPosition(-1.5, 0.0, 0.0);
 	scene->addMesh(tempMesh1);
 
@@ -123,6 +125,7 @@ bool initScene(void)
 	Mesh* tempMesh2 = new Mesh();
 	tempMesh2->initOBJ("assets/bunny.obj");
 	tempMesh2->setTexture("assets/textures/bunny_tex.png");
+	tempMesh2->setMaterialProperties(0.50, 0.50);	// diffuse and specular coefficients
 	tempMesh2->setPosition(1.5, 0.0, 0.0);
 	scene->addMesh(tempMesh2);
 }
@@ -153,7 +156,7 @@ void initAntTweakBar(void)
     * Add variables to the tweak bar
     **/
     TwAddVarRW( tweakbar,           		// my tweak bar
-            	"That's Me",          	// name of my variable
+            	"That's Me",          		// name of my variable
             	TW_TYPE_FLOAT,      		// tweak bar type
             	&testVariable,       		// my variable
            		"min=0 max=2 step=0.05 help=':D'" 
@@ -178,15 +181,18 @@ void initAntTweakBar(void)
 
 }
 
-void myFunction(void *clientData){
+void myFunction(void *clientData)
+{
 	std::cout << "Hej på mig igen " << std::endl;	
 }
 
-void magicTwMouseButtonWrapper(GLFWwindow* window, int button, int action, int mods){
+void magicTwMouseButtonWrapper(GLFWwindow* window, int button, int action, int mods)
+{
  	TwEventMouseButtonGLFW(button, action);
 }
 
-void magicTwMouseHoverWrapper(GLFWwindow * window, double x, double y) {
+void magicTwMouseHoverWrapper(GLFWwindow * window, double x, double y)
+{
     TwEventMousePosGLFW(x * 2, y * 2);
 }
 

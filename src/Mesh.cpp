@@ -97,10 +97,38 @@ void Mesh::initOBJ(const char* filename)
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);	
 }
 
+void Mesh::setMaterialProperties(float _k_diff, float _k_spec)
+{
+	k_diff = _k_diff;
+	k_spec = _k_spec;
+}
+
+void Mesh::setPosition(float _x, float _y, float _z)
+{
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(_x, _y, _z));
+	modelViewProjectionMatrix = getProjectionMatrix() * getViewMatrix() * modelMatrix;
+}
+
+void Mesh::setTexture(std::string _filename)
+{
+	const char* filename = _filename.c_str();
+	int texHeight = 512;
+	int texWidth  = 512;
+	
+	// Load the texture
+	Texture = png_texture_load(filename, &texWidth , &texHeight);
+	
+	// Get a handle for our "myTextureSampler" uniform
+	TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+}
+
 void Mesh::render()
 {
 	// Use our shader
 	glUseProgram(programID);
+
+	// Bind the texture of the object
+	glBindTexture(GL_TEXTURE_2D, Texture);
 
 	// Compute the MVP matrix from keyboard and mouse input
 	computeMatricesFromInputs();
@@ -112,7 +140,10 @@ void Mesh::render()
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 	// Upload texture
-	glUniform1i(Texture, TextureID);
+	glUniform1i(Texture, TextureID);		// TODO: Not the other way around?!
+	// Upload material properties
+	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
+	glUniform1f(glGetUniformLocation(programID, "k_spec"), k_spec);
 	// Upload camera position
 	glUniform3fv(glGetUniformLocation(programID, "cameraPos_ws"), 1, glm::value_ptr(getCameraPosition()));
 
@@ -159,9 +190,6 @@ void Mesh::render()
 		);
 	}
 
-	// Bind the texture of the object
-	glBindTexture(GL_TEXTURE_2D, Texture);
-
 	// Draw the triangles!
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
 
@@ -169,25 +197,6 @@ void Mesh::render()
 
 	// Unbind the texture so that it is not used for other objects as well.
 	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void Mesh::setPosition(float _x, float _y, float _z)
-{
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(_x, _y, _z));
-	modelViewProjectionMatrix = getProjectionMatrix() * getViewMatrix() * modelMatrix;
-}
-
-void Mesh::setTexture(std::string _filename)
-{
-	const char* filename = _filename.c_str();
-	int texHeight = 512;
-	int texWidth  = 512;
-	
-	// Load the texture
-	Texture = png_texture_load(filename, &texWidth , &texHeight);
-	
-	// Get a handle for our "myTextureSampler" uniform
-	TextureID  = glGetUniformLocation(programID, "myTextureSampler");
 }
 
 GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
