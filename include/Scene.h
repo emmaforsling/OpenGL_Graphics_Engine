@@ -34,9 +34,6 @@ private:
 	std::vector<Mesh *> meshes;
 	GLuint programID;
 	GLuint MatrixID;
-
-	GLuint Texture;
-	GLuint TextureID;
 };
 
 #endif

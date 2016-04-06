@@ -15,4 +15,3 @@ void main() {
     //fragmentColor = diffuseLighting * vec4(1.0,1.0,1.0,1.0);
     fragmentColor = diffuseLighting * texture( myTextureSampler, uv );
 }
-

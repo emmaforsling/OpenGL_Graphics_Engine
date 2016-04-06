@@ -2,7 +2,11 @@
 
 Mesh::Mesh()
 {
-		
+	// Create and compile our GLSL program from the shaders
+	programID = LoadShaders( "shaders/vertexshader.glsl", "shaders/fragmentshader.glsl" );
+
+	// Get a handle for our "MVP" uniform
+	MatrixID = glGetUniformLocation(programID, "MVP");
 }
 
 Mesh::~Mesh()
@@ -88,7 +92,92 @@ void Mesh::initOBJ(const char* filename)
 	glGenBuffers(1, &uvbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);	
+}
 
+void Mesh::render()
+{
+	// Use our shader
+	glUseProgram(programID);
+
+	// Compute the MVP matrix from keyboard and mouse input
+	computeMatricesFromInputs();
+	glm::mat4 ProjectionMatrix = getProjectionMatrix();
+	glm::mat4 ViewMatrix = getViewMatrix();
+	glm::mat4 ModelMatrix = glm::mat4(1.0);
+	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+	// Send our transformation to the currently bound shader, 
+	// in the "MVP" uniform
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+
+	glUniform1i(Texture, TextureID);
+
+	// 1st attribute buffer : vertices
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glVertexAttribPointer(
+		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		3,                  // size
+		GL_FLOAT,           // type
+		GL_FALSE,           // normalized?
+		0,                  // stride
+		(void*)0            // array buffer offset
+	);
+
+	
+	if(normalBuffer)
+	{
+		// 2nd attribute buffer : normals
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+		glVertexAttribPointer(
+			1,                  // attribute 1
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_TRUE,            // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+	}
+
+	if(uvbuffer)
+	{
+		// 3rd attribute buffer : UVs
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glVertexAttribPointer(
+			2,                                // attribute 2
+			2,                                // size
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+		);
+	}
+
+	// Bind the texture of the object
+	glBindTexture(GL_TEXTURE_2D, Texture);
+
+	// Draw the triangles!
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
+
+	glDisableVertexAttribArray(0);
+
+	// Unbind the texture so that it is not used for other objects as well.
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Mesh::setTexture(std::string _filename)
+{
+	const char* filename = _filename.c_str();
+	int texHeight = 512;
+	int texWidth  = 512;
+	
+	// Load the texture
+	Texture = png_texture_load(filename, &texWidth , &texHeight);
+	
+	// Get a handle for our "myTextureSampler" uniform
+	TextureID  = glGetUniformLocation(programID, "myTextureSampler");
 }
 
 GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)

@@ -17,27 +17,17 @@ Scene::Scene()
 
 	meshes = std::vector<Mesh*>();
 
+	Mesh* tempMesh1 = new Mesh();
+	Mesh* tempMesh2 = new Mesh();
 
-	Mesh* tempMesh = new Mesh();
-	// tempMesh->initCube(1.0f);
-	tempMesh->initOBJ("assets/susanne.obj");
+	// tempMesh1->initCube(0.75f);
+	tempMesh1->initOBJ("assets/susanne.obj");
+	tempMesh2->initOBJ("assets/bunny.obj");
+	tempMesh1->setTexture("assets/textures/monkey_tex.png");
+	//tempMesh2->setTexture("assets/textures/monkey_tex.png");
 
-	int texHeight = 512;
-	int texWidth  = 512;
-	// Load the texture
-	Texture = tempMesh->png_texture_load("assets/textures/monkey_tex.png", &texWidth , &texHeight);
-	// Texture = loadDDS("assets/textures/uvmap.DDS");
-	// Get a handle for our "myTextureSampler" uniform
-	TextureID  = glGetUniformLocation(programID, "myTextureSampler");
-
-
-	meshes.push_back(tempMesh);
-
-	// Create and compile our GLSL program from the shaders
-	programID = LoadShaders( "shaders/vertexshader.glsl", "shaders/fragmentshader.glsl" );
-
-	// Get a handle for our "MVP" uniform
-	MatrixID = glGetUniformLocation(programID, "MVP");
+	meshes.push_back(tempMesh1);
+	meshes.push_back(tempMesh2);
 }
 
 Scene::~Scene()
@@ -68,65 +58,10 @@ void Scene::render(GLFWwindow* window)
 		// Clear the screen and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Use our shader
-		glUseProgram(programID);
-
-		// Compute the MVP matrix from keyboard and mouse input
-		computeMatricesFromInputs();
-		glm::mat4 ProjectionMatrix = getProjectionMatrix();
-		glm::mat4 ViewMatrix = getViewMatrix();
-		glm::mat4 ModelMatrix = glm::mat4(1.0);
-		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
-
-		// Send our transformation to the currently bound shader, 
-		// in the "MVP" uniform
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-
-		glUniform1i(TextureID, Texture);
-
-		// 1st attribute buffer : vertices
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getVertexbuffer());
-		glVertexAttribPointer(
-			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_FALSE,           // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
-
-		// 2nd attribute buffer : normals
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getNormalBuffer());
-		glVertexAttribPointer(
-			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_TRUE,            // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
-
-		if(meshes.at(0)->getUvBuffer()){
-			// 3rd attribute buffer : UVs
-			glEnableVertexAttribArray(2);
-			glBindBuffer(GL_ARRAY_BUFFER, meshes.at(0)->getUvBuffer());
-			glVertexAttribPointer(
-				2,                                // attribute
-				2,                                // size
-				GL_FLOAT,                         // type
-				GL_FALSE,                         // normalized?
-				0,                                // stride
-				(void*)0                          // array buffer offset
-			);
+		for(int i = 0; i < meshes.size(); ++i)
+		{
+			meshes[i]->render();
 		}
-
-		// Draw the triangles!
-		// glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
-		glDrawArrays(GL_TRIANGLES, 0, meshes.at(0)->getVerticesLength() );
-
-		glDisableVertexAttribArray(0);
 
 		// Render the AntTweakBar
 		TwDraw();
