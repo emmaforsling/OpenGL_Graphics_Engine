@@ -50,7 +50,12 @@ int main(void)
 	initAntTweakBar();
 
 	// Render the window
-	scene->render(window);
+	do
+	{
+		scene->render(window);
+	} // Check if the ESC key was pressed or the window was closed
+	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
+		   glfwWindowShouldClose(window) == 0 );
 
 	// Remove AntTweakBar
     TwTerminate();
@@ -104,7 +109,22 @@ bool initOpenGL(void)
 
 bool initScene(void)
 {
+	// Initialize scene
 	scene = new Scene();
+
+	// Create and add a mesh to the scene
+	Mesh* tempMesh1 = new Mesh();
+	tempMesh1->initOBJ("assets/susanne.obj");
+	tempMesh1->setTexture("assets/textures/monkey_tex.png");
+	tempMesh1->setPosition(-1.5, 0.0, 0.0);
+	scene->addMesh(tempMesh1);
+
+	// Create and add a mesh to the scene
+	Mesh* tempMesh2 = new Mesh();
+	tempMesh2->initOBJ("assets/bunny.obj");
+	tempMesh2->setTexture("assets/textures/bunny_tex.png");
+	tempMesh2->setPosition(1.5, 0.0, 0.0);
+	scene->addMesh(tempMesh2);
 }
 
 /****************************** <AntTweakBar> *********************************/

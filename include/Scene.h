@@ -24,10 +24,14 @@ public:
 	// Destructor
 	~Scene();
 
+	// Scene set-up functions
+	void addMesh(Mesh* _mesh);
+
+	// Render
 	void render(GLFWwindow*);
 
 	// Get functions
-	std::vector<Mesh*> getMeshes();
+	//std::vector<Mesh*> getMeshes(){return meshes;};
 
 private:
 	Camera* camera;

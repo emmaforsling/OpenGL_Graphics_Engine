@@ -8,8 +8,8 @@ Mesh::Mesh()
 	// Get a handle for our "MVP" uniform
 	MatrixID = glGetUniformLocation(programID, "MVP");
 
+	// Initialize model matrix
 	modelMatrix = glm::mat4(1.0);
-
 }
 
 Mesh::~Mesh()
