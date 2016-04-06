@@ -22,7 +22,6 @@ glm::mat4 getProjectionMatrix(){
 	return ProjectionMatrix;
 }
 
-
 // Initial position : on +Z
 glm::vec3 position = glm::vec3( 0, 0, 5 ); 
 // Initial horizontal angle : toward -Z
@@ -37,6 +36,11 @@ float mouseSpeed = 0.003f;
 
 double xpos_old = 1024/2; 
 double ypos_old = 768/2;
+
+glm::vec3 getCameraPosition()
+{
+	return position;
+}
 
 void computeMatricesFromInputs(){
 

@@ -9,14 +9,16 @@ uniform mat4 MVP;
 uniform mat4 M;
 uniform mat4 V;
 uniform vec3 lightPosition;
-uniform vec3 cameraPosition;
 
-out vec3 normal;
+out vec3 normal_ws;
+out vec3 fragPos_ws;
 out vec2 uv;
 
 void main()
 {
 	gl_Position = MVP * vec4(vertexPos_ms, 1.0);
+	fragPos_ws = mat3(M) * vertexPos_ms;
 	uv = uvCoordinates;
-	normal = vec3(transpose(inverse(V * M)) * vec4(vertexNormal_ms, 1.0));
+	// TODO: Is this really in world space...?
+	normal_ws = vec3(transpose(inverse(V * M)) * vec4(vertexNormal_ms, 1.0));
 }

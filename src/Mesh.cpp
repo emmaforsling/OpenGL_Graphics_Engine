@@ -108,11 +108,13 @@ void Mesh::render()
 	glm::mat4 ViewMatrix = getViewMatrix();
 	modelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * modelMatrix;
 
-	// Send our transformation to the currently bound shader, 
-	// in the "MVP" uniform
+	// Upload uniforms
+	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
-
+	// Upload texture
 	glUniform1i(Texture, TextureID);
+	// Upload camera position
+	glUniform3fv(glGetUniformLocation(programID, "cameraPos_ws"), 1, glm::value_ptr(getCameraPosition()));
 
 	// 1st attribute buffer : vertices
 	glEnableVertexAttribArray(0);
