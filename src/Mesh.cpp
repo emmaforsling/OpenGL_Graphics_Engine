@@ -7,6 +7,9 @@ Mesh::Mesh()
 
 	// Get a handle for our "MVP" uniform
 	MatrixID = glGetUniformLocation(programID, "MVP");
+
+	modelMatrix = glm::mat4(1.0);
+
 }
 
 Mesh::~Mesh()
@@ -103,12 +106,11 @@ void Mesh::render()
 	computeMatricesFromInputs();
 	glm::mat4 ProjectionMatrix = getProjectionMatrix();
 	glm::mat4 ViewMatrix = getViewMatrix();
-	glm::mat4 ModelMatrix = glm::mat4(1.0);
-	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+	modelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * modelMatrix;
 
 	// Send our transformation to the currently bound shader, 
 	// in the "MVP" uniform
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 
 	glUniform1i(Texture, TextureID);
 
@@ -165,6 +167,12 @@ void Mesh::render()
 
 	// Unbind the texture so that it is not used for other objects as well.
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Mesh::setPosition(float _x, float _y, float _z)
+{
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(_x, _y, _z));
+	modelViewProjectionMatrix = getProjectionMatrix() * getViewMatrix() * modelMatrix;
 }
 
 void Mesh::setTexture(std::string _filename)

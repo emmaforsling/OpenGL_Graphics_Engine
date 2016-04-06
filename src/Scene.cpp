@@ -17,14 +17,18 @@ Scene::Scene()
 
 	meshes = std::vector<Mesh*>();
 
+
+	// This should not be in the constructor, perhaps... =)
 	Mesh* tempMesh1 = new Mesh();
 	Mesh* tempMesh2 = new Mesh();
-
-	// tempMesh1->initCube(0.75f);
+	// Mesh 1
 	tempMesh1->initOBJ("assets/susanne.obj");
-	tempMesh2->initOBJ("assets/bunny.obj");
+	tempMesh1->setPosition(-1.5, 0.0, 0.0);
 	tempMesh1->setTexture("assets/textures/monkey_tex.png");
-	//tempMesh2->setTexture("assets/textures/monkey_tex.png");
+	// Mesh 2
+	tempMesh2->initOBJ("assets/bunny.obj");
+	tempMesh2->setPosition(1.5, 0.0, 0.0);
+	tempMesh2->setTexture("assets/textures/bunny_tex.png");
 
 	meshes.push_back(tempMesh1);
 	meshes.push_back(tempMesh2);

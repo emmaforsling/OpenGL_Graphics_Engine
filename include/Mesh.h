@@ -20,7 +20,7 @@
 
 // GLM includes
 #include <glm/glm.hpp>
-
+#include <glm/gtc/matrix_transform.hpp>
 
 class Mesh{
 public:	
@@ -44,6 +44,9 @@ public:
 	void setTexture(std::string _filename);
 	GLuint png_texture_load(const char * file_name, int * width, int * height);
 
+	// Operations
+	void setPosition(float _x, float _y, float _z);
+
 	// Render functions
 	void render();
 
@@ -57,6 +60,10 @@ private:
 	GLuint MatrixID;
 	GLuint Texture;
 	GLuint TextureID;
+
+	// Matrices
+	glm::mat4 modelMatrix;
+	glm::mat4 modelViewProjectionMatrix;
 
 	// Data
 	std::vector<glm::vec3> vertices;
