@@ -117,7 +117,7 @@ bool initScene(void)
 	Mesh* tempMesh1 = new Mesh();
 	tempMesh1->initOBJ("assets/susanne.obj");
 	tempMesh1->setTexture("assets/textures/monkey_tex.png");
-	tempMesh1->setMaterialProperties(0.85, 0.15);	// diffuse and specular coefficients
+	tempMesh1->setMaterialProperties(0.85, 0.15, 10.0);	// diffuse and specular coeff, specular power
 	tempMesh1->setPosition(-1.5, 0.0, 0.0);
 	scene->addMesh(tempMesh1);
 
@@ -125,7 +125,7 @@ bool initScene(void)
 	Mesh* tempMesh2 = new Mesh();
 	tempMesh2->initOBJ("assets/bunny.obj");
 	tempMesh2->setTexture("assets/textures/bunny_tex.png");
-	tempMesh2->setMaterialProperties(0.50, 0.50);	// diffuse and specular coefficients
+	tempMesh2->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
 	tempMesh2->setPosition(1.5, 0.0, 0.0);
 	scene->addMesh(tempMesh2);
 }

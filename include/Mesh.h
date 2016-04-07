@@ -43,7 +43,7 @@ public:
 
 	// Operations
 	void setPosition(float _x, float _y, float _z);
-	void setMaterialProperties(float k_diff, float k_spec);
+	void setMaterialProperties(float k_diff, float k_spec, float _specPow);
 
 	// Render functions
 	void render();
@@ -75,6 +75,7 @@ private:
 	// Material properties
 	float k_diff;
 	float k_spec;
+	float specPow;
 };
 
 #endif

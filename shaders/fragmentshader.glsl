@@ -11,7 +11,7 @@ uniform sampler2D myTextureSampler;
 uniform vec3 cameraPos_ws;
 
 // Scalars
-uniform float k_diff, k_spec;
+uniform float k_diff, k_spec, specPow;
 
 out vec4 fragmentColor;
 
@@ -33,9 +33,8 @@ void main() {
 
 	// Specular light
 	vec4 specularColor = vec4(1.0, 1.0, 1.0, 1.0);
-	float specularPower = 20.0;
 	vec3 reflectionDir_ws = reflect(lightDirection_ws, normal_ws);
-	float specularLight = pow(max(0.0, dot(reflectionDir_ws, viewDir_ws)), specularPower);
+	float specularLight = pow(max(0.0, dot(reflectionDir_ws, viewDir_ws)), specPow);
 
 	// Composite lighting contributions
 

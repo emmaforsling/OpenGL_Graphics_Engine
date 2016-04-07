@@ -97,10 +97,11 @@ void Mesh::initOBJ(const char* filename)
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);	
 }
 
-void Mesh::setMaterialProperties(float _k_diff, float _k_spec)
+void Mesh::setMaterialProperties(float _k_diff, float _k_spec, float _specPow)
 {
 	k_diff = _k_diff;
 	k_spec = _k_spec;
+	specPow = _specPow;
 }
 
 void Mesh::setPosition(float _x, float _y, float _z)
@@ -144,6 +145,7 @@ void Mesh::render()
 	// Upload material properties
 	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
 	glUniform1f(glGetUniformLocation(programID, "k_spec"), k_spec);
+	glUniform1f(glGetUniformLocation(programID, "specPow"), specPow);
 	// Upload camera position
 	glUniform3fv(glGetUniformLocation(programID, "cameraPos_ws"), 1, glm::value_ptr(getCameraPosition()));
 
