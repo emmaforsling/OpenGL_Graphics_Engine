@@ -123,10 +123,10 @@ bool initScene(void)
 
 	// Create and add a mesh to the scene
 	Mesh* tempMesh2 = new Mesh();
-	tempMesh2->initOBJ("assets/bunny.obj");
+	tempMesh2->initOBJ("assets/sphere.obj");
 	tempMesh2->setTexture("assets/textures/bunny_tex.png");
 	tempMesh2->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
-	tempMesh2->setPosition(1.5, 0.0, 0.0);
+	tempMesh2->setPosition(2.0, 0.0, 0.0);
 	scene->addMesh(tempMesh2);
 }
 

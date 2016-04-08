@@ -120,7 +120,7 @@ void Mesh::setTexture(std::string _filename)
 	Texture = png_texture_load(filename, &texWidth , &texHeight);
 	
 	// Get a handle for our "myTextureSampler" uniform
-	TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+	//TextureID  = glGetUniformLocation(programID, "myTextureSampler");
 }
 
 void Mesh::render()
@@ -141,7 +141,7 @@ void Mesh::render()
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 	// Upload texture
-	glUniform1i(Texture, TextureID);		// TODO: Not the other way around?!
+	//glUniform1i(0, 0);		// TODO: Not the other way around?!
 	// Upload material properties
 	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
 	glUniform1f(glGetUniformLocation(programID, "k_spec"), k_spec);

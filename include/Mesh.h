@@ -14,8 +14,7 @@
 
 // Source includes
 #include "utils/ObjectLoader.h"
-#include "utils/texture.h"
-#include "../include/utils/Shader.h"
+#include "../include/utils/ShaderManager.h"
 #include "../include/utils/controls.h"
 
 // GLM includes
