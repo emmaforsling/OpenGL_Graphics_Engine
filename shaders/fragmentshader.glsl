@@ -37,6 +37,7 @@ void main() {
 	float specularLight = pow(max(0.0, dot(reflectionDir_ws, viewDir_ws)), specPow);
 
 	// Composite lighting contributions
-
+	float lightDist = length(lightPosition_ws - fragPos_ws);
+	float atten = 1.0 / lightDist;
     fragmentColor = k_diff * diffuseLighting * texture( myTextureSampler, uv ) + k_spec * specularLight * specularColor;
 }
