@@ -7,6 +7,7 @@ How to compile and run the application using the terminal:
   1. "mkdir bin"
   2. "make"
   3. "make run"
+
 Or, instead of 2 and 3: "make sense" =)
 
 Links:
