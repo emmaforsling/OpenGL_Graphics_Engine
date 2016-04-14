@@ -55,6 +55,7 @@ public:
 
 	// Texture functions
 	void setTexture(std::string _filename);
+	void setIsTessellationActive(bool _tessellation){tessellation = _tessellation;};
 	GLuint png_texture_load(const char * file_name, int * width, int * height);
 
 private:		
@@ -81,6 +82,8 @@ private:
 	float k_diff;
 	float k_spec;
 	float specPow;
+
+	bool tessellation;
 };
 
 #endif

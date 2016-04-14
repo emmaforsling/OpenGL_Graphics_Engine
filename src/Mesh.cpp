@@ -2,6 +2,7 @@
 
 Mesh::Mesh()
 {
+	tessellation = false;
 	// Initialize model matrix
 	modelMatrix = glm::mat4(1.0);
 }
@@ -196,8 +197,18 @@ void Mesh::render()
 		);
 	}
 
-	// Draw the triangles!
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
+	if(tessellation)
+	{
+		glPatchParameteri(GL_PATCH_VERTICES,3);
+		// Draw the patches!
+		glDrawArrays(GL_PATCHES, 0, vertices.size() );
+	}
+	else
+	{
+		// Draw the triangles!
+		glDrawArrays(GL_TRIANGLES, 0, vertices.size() );	
+	}
+	
 
 	glDisableVertexAttribArray(0);
 
