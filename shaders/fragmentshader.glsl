@@ -37,6 +37,9 @@ void main() {
 	vec3 reflectionDir_ws = reflect(lightDirection_ws, normal_ws);
 	float specularLight = pow(max(0.0, dot(reflectionDir_ws, -viewDir_ws)), specPow);
 
+	float lightDist = length(lightPosition_ws - fragPos_ws);
+	float atten = min(1.0, 10.0 / lightDist);
+	
 	// Composite lighting contributions
-    fragmentColor = k_diff * diffuseLighting * texture( myTextureSampler, uv ) + k_spec * specularLight * specularColor;
+    fragmentColor = atten * k_diff * diffuseLighting * texture( myTextureSampler, uv ) + k_spec * specularLight * specularColor;
 }

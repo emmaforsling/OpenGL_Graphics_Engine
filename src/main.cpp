@@ -128,15 +128,15 @@ bool initScene(void)
 	tempMesh2->initOBJ("assets/sphere.obj");
 	tempMesh2->setTexture("assets/textures/bunny_tex.png");
 	tempMesh2->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
-	tempMesh2->setPosition(1.5, 0.0, 0.0);
+	tempMesh2->setPosition(2.0, 0.0, 0.0);
 	scene->addMesh(tempMesh2);
 
-	Mesh* cameraMesh = new Mesh();
-	cameraMesh->initCube(0.25);
-	cameraMesh->setTexture("assets/textures/bunny_tex.png");
-	cameraMesh->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
-	cameraMesh->setPosition(0.0, 0.0, 2.0);
-	scene->addMesh(cameraMesh);
+	// Mesh* cameraMesh = new Mesh();
+	// cameraMesh->initCube(0.25);
+	// cameraMesh->setTexture("assets/textures/bunny_tex.png");
+	// cameraMesh->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
+	// cameraMesh->setPosition(0.0, 0.0, 2.0);
+	// scene->addMesh(cameraMesh);
 }
 
 /****************************** <AntTweakBar> *********************************/
