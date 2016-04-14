@@ -3,6 +3,11 @@ Graphics engine that enables loading .obj objects and texturering them with .png
 Ment for use as a base for other projects.
 
 This application is compiled and tested only on OSX.
+How to compile and run the application using the terminal:
+  1. "mkdir bin"
+  2. "make"
+  3. "make run"
+Or, instead of 2 and 3: "make sense" =)
 
 Links:
 * OpenGL tutorials: http://www.opengl-tutorial.org/
