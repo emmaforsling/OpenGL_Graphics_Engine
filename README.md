@@ -1,4 +1,4 @@
-# OpenGL_Graphics_Engine
+# OpenGL Graphics Engine
 Graphics engine that enables loading .obj objects and texturering them with .png files.
 Ment for use as a base for other projects.
 
