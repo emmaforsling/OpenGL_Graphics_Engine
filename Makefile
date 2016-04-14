@@ -19,7 +19,7 @@ FILES = $(wildcard src/*.cpp) $(wildcard shaders/*.cpp) $(wildcard src/utils/*.c
 BINFOLD = bin/
 
 # Binary name:
-BINNAME = TSBK03
+BINNAME = OpenGL_Graphics_Engine
 
 
 all: compile
