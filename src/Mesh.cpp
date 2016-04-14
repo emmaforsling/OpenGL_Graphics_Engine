@@ -140,6 +140,8 @@ void Mesh::render()
 	// Upload uniforms
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(programID, "M"), 1, GL_FALSE, &modelMatrix[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(programID, "V"), 1, GL_FALSE, &ViewMatrix[0][0]);
 	// Upload texture
 	glUniform1i(Texture, TextureID);		// TODO: Not the other way around?!
 	// Upload material properties

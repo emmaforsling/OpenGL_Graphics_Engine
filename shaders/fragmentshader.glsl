@@ -10,13 +10,14 @@ uniform sampler2D myTextureSampler;
 // Vectors
 uniform vec3 cameraPos_ws;
 
+uniform mat4 M;
+
 // Scalars
 uniform float k_diff, k_spec, specPow;
 
 out vec4 fragmentColor;
 
-//vec3 lightDirection = normalize(vec3(-1.0, -1.0, -1.0));
-vec3 lightPosition_ws = vec3(0.0, 0.0, 10.0);
+vec3 lightPosition_ws = vec3(0.0, 0.0, 2.0);
 
 void main() {
 
@@ -24,19 +25,18 @@ void main() {
 	vec3 viewDir_ws = normalize(fragPos_ws - cameraPos_ws);
 
 	// Light direction
-	vec3 lightDirection_ws = normalize(lightPosition_ws - fragPos_ws);
+	vec3 lightDirection_ws = normalize(fragPos_ws - lightPosition_ws);
 
 	// Phong shading
 
 	// Diffuse light
-	float diffuseLighting = max(0.0, dot(normal_ws, lightDirection_ws));
+	float diffuseLighting = max(0.0, dot(normal_ws, -lightDirection_ws));
 
 	// Specular light
 	vec4 specularColor = vec4(1.0, 1.0, 1.0, 1.0);
 	vec3 reflectionDir_ws = reflect(lightDirection_ws, normal_ws);
-	float specularLight = pow(max(0.0, dot(reflectionDir_ws, viewDir_ws)), specPow);
+	float specularLight = pow(max(0.0, dot(reflectionDir_ws, -viewDir_ws)), specPow);
 
 	// Composite lighting contributions
-
     fragmentColor = k_diff * diffuseLighting * texture( myTextureSampler, uv ) + k_spec * specularLight * specularColor;
 }

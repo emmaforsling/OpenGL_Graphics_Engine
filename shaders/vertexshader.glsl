@@ -17,8 +17,9 @@ out vec2 uv;
 void main()
 {
 	gl_Position = MVP * vec4(vertexPos_ms, 1.0);
-	fragPos_ws = mat3(M) * vertexPos_ms;
+
+	fragPos_ws = vec3(M * vec4(vertexPos_ms,1));
 	uv = uvCoordinates;
 	// TODO: Is this really in world space...?
-	normal_ws = vec3(transpose(inverse(V * M)) * vec4(vertexNormal_ms, 1.0));
+	normal_ws = vec3(transpose(inverse(M)) * vec4(vertexNormal_ms, 1.0));
 }

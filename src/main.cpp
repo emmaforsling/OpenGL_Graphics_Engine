@@ -42,6 +42,8 @@ int main(void)
 	{
 		return -1;
 	}
+
+	printf("Supported GLSL version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 	
 	// Initialize the scene
 	initScene();
@@ -123,11 +125,18 @@ bool initScene(void)
 
 	// Create and add a mesh to the scene
 	Mesh* tempMesh2 = new Mesh();
-	tempMesh2->initOBJ("assets/bunny.obj");
+	tempMesh2->initOBJ("assets/sphere.obj");
 	tempMesh2->setTexture("assets/textures/bunny_tex.png");
 	tempMesh2->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
 	tempMesh2->setPosition(1.5, 0.0, 0.0);
 	scene->addMesh(tempMesh2);
+
+	Mesh* cameraMesh = new Mesh();
+	cameraMesh->initCube(0.25);
+	cameraMesh->setTexture("assets/textures/bunny_tex.png");
+	cameraMesh->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
+	cameraMesh->setPosition(0.0, 0.0, 2.0);
+	scene->addMesh(cameraMesh);
 }
 
 /****************************** <AntTweakBar> *********************************/
