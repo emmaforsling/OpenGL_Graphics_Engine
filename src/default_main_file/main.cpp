@@ -17,6 +17,7 @@ using namespace glm;
 // Source includes
 #include "../include/Scene.h"
 
+
 // Functions
 bool initOpenGL(void);
 bool initScene(void);
@@ -46,7 +47,7 @@ int main(void)
 	printf("Supported GLSL version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 	
 	// Initialize the scene
-	initScene();
+	//initScene();
 
 	// Initialize the AntTweakBar window 
 	initAntTweakBar();
@@ -117,6 +118,8 @@ bool initScene(void)
 
 	// Create and add a mesh to the scene
 	Mesh* tempMesh1 = new Mesh();
+	tempMesh1->initShaders("shaders/vertexshader.glsl", "shaders/fragmentshader.glsl");
+	// tempMesh1->setProgramID(LoadShaders("shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"));
 	tempMesh1->initOBJ("assets/susanne.obj");
 	tempMesh1->setTexture("assets/textures/monkey_tex.png");
 	tempMesh1->setMaterialProperties(0.85, 0.15, 10.0);	// diffuse and specular coeff, specular power
@@ -125,6 +128,7 @@ bool initScene(void)
 
 	// Create and add a mesh to the scene
 	Mesh* tempMesh2 = new Mesh();
+	tempMesh2->initShaders("shaders/vertexshader.glsl", "shaders/fragmentshader.glsl");
 	tempMesh2->initOBJ("assets/sphere.obj");
 	tempMesh2->setTexture("assets/textures/bunny_tex.png");
 	tempMesh2->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
