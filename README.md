@@ -1,8 +1,7 @@
 # OpenGL Graphics Engine
 Graphics engine that enables loading .obj objects and texturering them with .png files.
-Ment for use as a base for other projects.
+Ment for use as a base for other projects. The application is compiled and tested only on OSX.
 
-This application is compiled and tested only on OSX.
 How to compile and run the application using the terminal:
   1. "mkdir bin"
   2. "make"
