@@ -30,9 +30,15 @@ public:
 	~Mesh();
 
 	// Init functions
+	void initShaders(const char* vertexShader_filename, const char* fragmentShader_filename);
 	void initCube(float size);
 	void initOBJ(const char* filename);
 
+	void setProgramID(GLuint _programID){
+		programID = _programID;
+		// Get a handle for our "MVP" uniform
+		MatrixID = glGetUniformLocation(programID, "MVP");
+	};
 	// Get functions
 	GLuint getVertexArrayID(){ return vertexArrayID; };
 	GLuint getVertexbuffer(){ return vertexbuffer; };

@@ -2,12 +2,6 @@
 
 Mesh::Mesh()
 {
-	// Create and compile our GLSL program from the shaders
-	programID = LoadShaders( "shaders/vertexshader.glsl", "shaders/fragmentshader.glsl" );
-
-	// Get a handle for our "MVP" uniform
-	MatrixID = glGetUniformLocation(programID, "MVP");
-
 	// Initialize model matrix
 	modelMatrix = glm::mat4(1.0);
 }
@@ -21,6 +15,14 @@ Mesh::~Mesh()
 	}
 
 	glDeleteVertexArrays(1, &vertexArrayID);
+}
+
+void Mesh::initShaders(const char* vertexShader_filename, const char* fragmentShader_filename)
+{
+	// Create and compile our GLSL program from the shaders
+	programID = LoadShaders( vertexShader_filename, fragmentShader_filename );
+	// Get a handle for our "MVP" uniform
+	MatrixID = glGetUniformLocation(programID, "MVP");
 }
 
 void Mesh::initCube(float size)
