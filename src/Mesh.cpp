@@ -113,26 +113,49 @@ void Mesh::setPosition(float _x, float _y, float _z)
 	modelViewProjectionMatrix = getProjectionMatrix() * getViewMatrix() * modelMatrix;
 }
 
-void Mesh::setTexture(std::string _filename)
+void Mesh::setDispMap(std::string _filename)
 {
 	const char* filename = _filename.c_str();
 	int texHeight = 512;
 	int texWidth  = 512;
 	
 	// Load the texture
-	Texture = png_texture_load(filename, &texWidth , &texHeight);
+	tex_dispMap = png_texture_load(filename, &texWidth , &texHeight);
 	
-	// Get a handle for our "myTextureSampler" uniform
-	//TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+	// Get a handle for our "dispMap" uniform
+	handle_dispMap = glGetUniformLocation(programID, "dispMap");
+}
+
+void Mesh::setNormMap(std::string _filename)
+{
+	const char* filename = _filename.c_str();
+	int texHeight = 512;
+	int texWidth  = 512;
+	
+	// Load the texture
+	tex_normMap = png_texture_load(filename, &texWidth , &texHeight);
+	
+	// Get a handle for our "dispMap" uniform
+	handle_normMap = glGetUniformLocation(programID, "normMap");
+}
+
+void Mesh::setColorMap(std::string _filename)
+{
+	const char* filename = _filename.c_str();
+	int texHeight = 512;
+	int texWidth  = 512;
+	
+	// Load the texture
+	tex_colorMap = png_texture_load(filename, &texWidth , &texHeight);
+	
+	// Get a handle for our "dispMap" uniform
+	handle_colorMap = glGetUniformLocation(programID, "colorMap");
 }
 
 void Mesh::render()
 {
 	// Use our shader
 	glUseProgram(programID);
-
-	// Bind the texture of the object
-	glBindTexture(GL_TEXTURE_2D, Texture);
 
 	// Compute the MVP matrix from keyboard and mouse input
 	computeMatricesFromInputs();
@@ -141,12 +164,27 @@ void Mesh::render()
 	modelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * modelMatrix;
 
 	// Upload uniforms
-	// Send our transformation to the currently bound shader, in the "MVP" uniform
+	
+	// Transformation matrices
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(programID, "M"), 1, GL_FALSE, &modelMatrix[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(programID, "V"), 1, GL_FALSE, &ViewMatrix[0][0]);
-	// Upload texture
-	//glUniform1i(0, 0);		// TODO: Not the other way around?!
+
+	// Displacement map
+	glActiveTexture(GL_TEXTURE0); 
+	glBindTexture(GL_TEXTURE_2D, tex_dispMap);
+	glUniform1i(glGetUniformLocation(programID, "dispMap"), 0);
+	
+	// Normal map
+	glActiveTexture(GL_TEXTURE1); 
+	glBindTexture(GL_TEXTURE_2D, tex_normMap);
+	glUniform1i(glGetUniformLocation(programID, "normMap"), 1);
+
+	// Color map
+	glActiveTexture(GL_TEXTURE2); 
+	glBindTexture(GL_TEXTURE_2D, tex_colorMap);
+	glUniform1i(glGetUniformLocation(programID, "colorMap"), 2);
+	
 	// Upload material properties
 	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
 	glUniform1f(glGetUniformLocation(programID, "k_spec"), k_spec);
@@ -199,7 +237,7 @@ void Mesh::render()
 
 	if(tessellation)
 	{
-		glPatchParameteri(GL_PATCH_VERTICES,3);
+		glPatchParameteri(GL_PATCH_VERTICES, 3);
 		// Draw the patches!
 		glDrawArrays(GL_PATCHES, 0, vertices.size() );
 	}

@@ -54,20 +54,27 @@ public:
 	void render();
 
 	// Texture functions
-	void setTexture(std::string _filename);
+	void setDispMap(std::string _filename);
+	void setNormMap(std::string _filename);
+	void setColorMap(std::string _filename);
 	void setIsTessellationActive(bool _tessellation){tessellation = _tessellation;};
 	GLuint png_texture_load(const char * file_name, int * width, int * height);
 
-private:		
-	// OpenGL handles 		
+private:			
 	GLuint vertexArrayID;
 	GLuint vertexbuffer;
 	GLuint normalBuffer;
 	GLuint uvbuffer;
 	GLuint programID;
 	GLuint MatrixID;
-	GLuint Texture;
-	GLuint TextureID;
+	
+	// Textures
+	GLuint tex_dispMap;
+	GLuint tex_normMap;
+	GLuint tex_colorMap;
+	GLuint handle_dispMap;
+	GLuint handle_normMap;
+	GLuint handle_colorMap;
 
 	// Matrices
 	glm::mat4 modelMatrix;

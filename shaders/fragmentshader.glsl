@@ -5,7 +5,9 @@ in vec3 fragPos_ws;
 in vec2 uv;
 
 // Textures
-uniform sampler2D myTextureSampler;
+uniform sampler2D dispMap;
+uniform sampler2D normMap;
+uniform sampler2D colorMap;
 
 // Vectors
 uniform vec3 cameraPos_ws;
@@ -41,5 +43,5 @@ void main() {
 	float atten = min(1.0, 10.0 / lightDist);
 	
 	// Composite lighting contributions
-    fragmentColor = atten * k_diff * diffuseLighting * texture( myTextureSampler, uv ) + k_spec * specularLight * specularColor;
+    fragmentColor = atten * k_diff * diffuseLighting * texture( colorMap, uv ) + k_spec * specularLight * specularColor;
 }
