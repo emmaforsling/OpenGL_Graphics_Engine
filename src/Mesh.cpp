@@ -2,7 +2,13 @@
 
 Mesh::Mesh()
 {
+	// Default values
 	tessellation = false;
+	k_diff = 0.0;
+	k_spec = 0.0;
+	specPow = 0.0;
+	tessScale = 1.0;
+
 	// Initialize model matrix
 	modelMatrix = glm::mat4(1.0);
 }
@@ -163,6 +169,8 @@ void Mesh::render()
 	glm::mat4 ViewMatrix = getViewMatrix();
 	modelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * modelMatrix;
 
+	// 
+
 	// Upload uniforms
 	
 	// Transformation matrices
@@ -186,6 +194,7 @@ void Mesh::render()
 	glUniform1i(glGetUniformLocation(programID, "colorMap"), 2);
 	
 	// Upload material properties
+	glUniform1f(glGetUniformLocation(programID, "tessScale"), tessScale);
 	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
 	glUniform1f(glGetUniformLocation(programID, "k_spec"), k_spec);
 	glUniform1f(glGetUniformLocation(programID, "specPow"), specPow);

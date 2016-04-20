@@ -34,6 +34,8 @@ public:
 	void initCube(float size);
 	void initOBJ(const char* filename);
 
+	
+
 	void setProgramID(GLuint _programID){
 		programID = _programID;
 		// Get a handle for our "MVP" uniform
@@ -45,6 +47,9 @@ public:
 	GLuint getNormalBuffer(){ return normalBuffer; };
 	GLuint getUvBuffer(){ return uvbuffer; };
 	int getVerticesLength(){ return vertices.size(); };
+
+	float getTessellationScale(){return tessScale;};
+	void setTessellationScale(float _tessScale){tessScale = _tessScale;};
 
 	// Operations
 	void setPosition(float _x, float _y, float _z);
@@ -89,6 +94,9 @@ private:
 	float k_diff;
 	float k_spec;
 	float specPow;
+
+	// Tesselation
+	float tessScale;
 
 	bool tessellation;
 };
