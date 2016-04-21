@@ -34,7 +34,7 @@ public:
 	void initCube(float size);
 	void initOBJ(const char* filename);
 
-	
+
 
 	void setProgramID(GLuint _programID){
 		programID = _programID;
@@ -54,6 +54,7 @@ public:
 	// Operations
 	void setPosition(float _x, float _y, float _z);
 	void setMaterialProperties(float k_diff, float k_spec, float _specPow);
+	void scaleObject(float _size);
 
 	// Render functions
 	void render();

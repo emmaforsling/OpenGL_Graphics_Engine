@@ -113,6 +113,11 @@ void Mesh::setMaterialProperties(float _k_diff, float _k_spec, float _specPow)
 	specPow = _specPow;
 }
 
+void Mesh::scaleObject(float _scale)
+{
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(_scale));
+}
+
 void Mesh::setPosition(float _x, float _y, float _z)
 {
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(_x, _y, _z));
