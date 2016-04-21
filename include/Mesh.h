@@ -41,6 +41,8 @@ public:
 	void initCube(float size);
 	void initOBJ(const char* filename);
 
+
+
 	void setProgramID(GLuint _programID){
 		programID = _programID;
 		// Get a handle for our "MVP" uniform
@@ -53,6 +55,9 @@ public:
 	GLuint getUvBuffer(){ return uvbuffer; };
 	int getVerticesLength(){ return vertices.size(); };
 
+	float getTessellationScale(){return tessScale;};
+	void setTessellationScale(float _tessScale){tessScale = _tessScale;};
+
 	// Operations
 	void setPosition(float _x, float _y, float _z);
 	void setMaterialProperties(float k_diff, float k_spec, float _specPow);
@@ -61,6 +66,7 @@ public:
 	void addVec3Uniform(const char* name, GLfloat* _value);
 	void addMat4Uniform(const char* name, GLfloat* _value);
 	void addTextureUniform(GLuint _texUnit, GLuint _texData, const char* name, GLfloat _value);
+	void scaleObject(float _size);
 
 	// Render functions
 	void render();
@@ -139,6 +145,9 @@ private:
 	float k_diff;
 	float k_spec;
 	float specPow;
+
+	// Tesselation
+	float tessScale;
 
 	bool tessellation;
 

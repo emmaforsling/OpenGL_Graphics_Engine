@@ -2,7 +2,13 @@
 
 Mesh::Mesh()
 {
+	// Default values
 	tessellation = false;
+	k_diff = 0.0;
+	k_spec = 0.0;
+	specPow = 0.0;
+	tessScale = 1.0;
+
 	// Initialize model matrix
 	modelMatrix = glm::mat4(1.0);
 }
@@ -105,6 +111,11 @@ void Mesh::setMaterialProperties(float _k_diff, float _k_spec, float _specPow)
 	k_diff = _k_diff;
 	k_spec = _k_spec;
 	specPow = _specPow;
+}
+
+void Mesh::scaleObject(float _scale)
+{
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(_scale));
 }
 
 void Mesh::setPosition(float _x, float _y, float _z)
@@ -253,6 +264,7 @@ void Mesh::render()
 	glUniformMatrix4fv(glGetUniformLocation(programID, "V"), 1, GL_FALSE, &ViewMatrix[0][0]);
 
 	// Upload material properties
+	glUniform1f(glGetUniformLocation(programID, "tessScale"), tessScale);
 	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
 	glUniform1f(glGetUniformLocation(programID, "k_spec"), k_spec);
 	glUniform1f(glGetUniformLocation(programID, "specPow"), specPow);

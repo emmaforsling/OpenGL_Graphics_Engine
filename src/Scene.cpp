@@ -44,19 +44,9 @@ void Scene::addMesh(Mesh* _mesh)
 
 void Scene::render(GLFWwindow* window)
 {
-	// Clear the screen and depth buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	// Render all meshes
 	for(int i = 0; i < meshes.size(); ++i)
 	{
 		meshes[i]->render();
 	}
-
-	// Render the AntTweakBar (after the meshes)
-	TwDraw();
-
-	// Swap buffers
-	glfwSwapBuffers(window);
-	glfwPollEvents();
 }
