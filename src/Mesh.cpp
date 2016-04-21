@@ -124,6 +124,8 @@ void Mesh::setDispMap(std::string _filename)
 	
 	// Get a handle for our "dispMap" uniform
 	handle_dispMap = glGetUniformLocation(programID, "dispMap");
+
+	addTextureUniform(GL_TEXTURE0, tex_dispMap, "dispMap", 0);
 }
 
 void Mesh::setNormMap(std::string _filename)
@@ -137,6 +139,8 @@ void Mesh::setNormMap(std::string _filename)
 	
 	// Get a handle for our "dispMap" uniform
 	handle_normMap = glGetUniformLocation(programID, "normMap");
+
+	addTextureUniform(GL_TEXTURE1, tex_normMap, "normMap", 1);
 }
 
 void Mesh::setColorMap(std::string _filename)
@@ -148,8 +152,52 @@ void Mesh::setColorMap(std::string _filename)
 	// Load the texture
 	tex_colorMap = png_texture_load(filename, &texWidth , &texHeight);
 	
-	// Get a handle for our "dispMap" uniform
+	// Set the handle for the "dispMap" uniform
 	handle_colorMap = glGetUniformLocation(programID, "colorMap");
+
+	addTextureUniform(GL_TEXTURE2, tex_colorMap, "colorMap", 2);
+}
+
+void Mesh::Mesh::addIntegerUniform(const char* _name, GLuint _value)
+{
+	integerUniform tempUniform = integerUniform();
+	tempUniform.name = _name;
+	tempUniform.value = _value;
+	integerUniforms.push_back(tempUniform);
+}
+
+void Mesh::addFloatUniform(const char* _name, GLfloat _value)
+{
+	floatUniform tempUniform = floatUniform();
+	tempUniform.name = _name;
+	tempUniform.value = _value;
+	floatUniforms.push_back(tempUniform);
+}
+
+void Mesh::addVec3Uniform(const char* _name, GLfloat* _value)
+{
+	vec3Uniform tempUniform = vec3Uniform();
+	tempUniform.name = _name;
+	tempUniform.value = _value;
+	vec3Uniforms.push_back(tempUniform);
+}
+
+void Mesh::addMat4Uniform(const char* _name, GLfloat* _value)
+{
+	mat4Uniform tempUniform = mat4Uniform();
+	tempUniform.name = _name;
+	tempUniform.value = _value;
+	mat4Uniforms.push_back(tempUniform);
+}
+
+void Mesh::addTextureUniform(GLuint _texUnit, GLuint _texData, const char* _name, GLfloat _value)
+{
+	textureUniform tempUniform = textureUniform();
+	tempUniform.texUnit = _texUnit;
+	tempUniform.texData = _texData;
+	tempUniform.name = _name;
+	tempUniform.value = _value;
+	textureUniforms.push_back(tempUniform);
 }
 
 void Mesh::render()
@@ -163,32 +211,52 @@ void Mesh::render()
 	glm::mat4 ViewMatrix = getViewMatrix();
 	modelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * modelMatrix;
 
-	// Upload uniforms
+	// Upload integer uniforms
+	for(int i = 0; i < integerUniforms.size(); ++i)
+	{
+		uploadIntegerUniform(integerUniforms[i]);
+	}
+
+	// Upload float uniforms
+	for(int i = 0; i < floatUniforms.size(); ++i)
+	{
+		uploadFloatUniform(floatUniforms[i]);
+	}
+
+	// Upload vec3 uniforms
+	for(int i = 0; i < vec3Uniforms.size(); ++i)
+	{
+		uploadVec3Uniform(vec3Uniforms[i]);
+	}
 	
+	// Upload mat4 uniforms
+	for(int i = 0; i < mat4Uniforms.size(); ++i)
+	{
+		uploadMat4Uniform(mat4Uniforms[i]);
+	}
+
+	// Upload texture uniforms
+	for(int i = 0; i < textureUniforms.size(); ++i)
+	{
+		uploadTextureUniform(textureUniforms[i]);
+	}
+
+	// Upload float uniforms
+	for(int i = 0; i < floatUniforms.size(); ++i)
+	{
+		uploadFloatUniform(floatUniforms[i]);
+	}
+
 	// Transformation matrices
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(programID, "MVP"), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(programID, "M"), 1, GL_FALSE, &modelMatrix[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(programID, "V"), 1, GL_FALSE, &ViewMatrix[0][0]);
 
-	// Displacement map
-	glActiveTexture(GL_TEXTURE0); 
-	glBindTexture(GL_TEXTURE_2D, tex_dispMap);
-	glUniform1i(glGetUniformLocation(programID, "dispMap"), 0);
-	
-	// Normal map
-	glActiveTexture(GL_TEXTURE1); 
-	glBindTexture(GL_TEXTURE_2D, tex_normMap);
-	glUniform1i(glGetUniformLocation(programID, "normMap"), 1);
-
-	// Color map
-	glActiveTexture(GL_TEXTURE2); 
-	glBindTexture(GL_TEXTURE_2D, tex_colorMap);
-	glUniform1i(glGetUniformLocation(programID, "colorMap"), 2);
-	
 	// Upload material properties
 	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
 	glUniform1f(glGetUniformLocation(programID, "k_spec"), k_spec);
 	glUniform1f(glGetUniformLocation(programID, "specPow"), specPow);
+	
 	// Upload camera position
 	glUniform3fv(glGetUniformLocation(programID, "cameraPos_ws"), 1, glm::value_ptr(getCameraPosition()));
 
@@ -414,4 +482,31 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
     fclose(fp);
     
     return texture;
+}
+
+void Mesh::uploadIntegerUniform(integerUniform _uniform)
+{
+	glUniform1i(glGetUniformLocation(programID, _uniform.name), _uniform.value);
+}
+
+void Mesh::uploadFloatUniform(floatUniform _uniform)
+{
+	glUniform1f(glGetUniformLocation(programID, _uniform.name), _uniform.value);
+}
+
+void Mesh::uploadVec3Uniform(vec3Uniform _uniform)
+{
+	glUniform3fv(glGetUniformLocation(programID, _uniform.name), 1, _uniform.value);
+}
+
+void Mesh::uploadMat4Uniform(mat4Uniform _uniform)
+{
+	glUniformMatrix4fv(glGetUniformLocation(programID, _uniform.name), 1, GL_FALSE, _uniform.value);
+}
+
+void Mesh::uploadTextureUniform(textureUniform _uniform)
+{
+	glActiveTexture(_uniform.texUnit); 
+	glBindTexture(GL_TEXTURE_2D, _uniform.texData);
+	glUniform1i(glGetUniformLocation(programID, _uniform.name), _uniform.value);
 }
