@@ -211,6 +211,17 @@ void Mesh::addTextureUniform(GLuint _texUnit, GLuint _texData, const char* _name
 	textureUniforms.push_back(tempUniform);
 }
 
+void Mesh::updateFloatUniform(const char* _name, GLfloat _value)
+{
+	for(int i = 0; i < floatUniforms.size(); ++i)
+	{
+		if(floatUniforms[i].name == _name)
+		{
+			floatUniforms[i].value = _value;
+		}
+	}
+}
+
 void Mesh::render()
 {
 	// Use our shader
@@ -264,7 +275,6 @@ void Mesh::render()
 	glUniformMatrix4fv(glGetUniformLocation(programID, "V"), 1, GL_FALSE, &ViewMatrix[0][0]);
 
 	// Upload material properties
-	glUniform1f(glGetUniformLocation(programID, "tessScale"), tessScale);
 	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
 	glUniform1f(glGetUniformLocation(programID, "k_spec"), k_spec);
 	glUniform1f(glGetUniformLocation(programID, "specPow"), specPow);

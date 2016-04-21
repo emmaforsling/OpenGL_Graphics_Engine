@@ -58,15 +58,18 @@ public:
 	float getTessellationScale(){return tessScale;};
 	void setTessellationScale(float _tessScale){tessScale = _tessScale;};
 
-	// Operations
+	// Object operations
 	void setPosition(float _x, float _y, float _z);
 	void setMaterialProperties(float k_diff, float k_spec, float _specPow);
-	void addIntegerUniform(const char* name, GLuint _value);
-	void addFloatUniform(const char* name, GLfloat _value);
-	void addVec3Uniform(const char* name, GLfloat* _value);
-	void addMat4Uniform(const char* name, GLfloat* _value);
-	void addTextureUniform(GLuint _texUnit, GLuint _texData, const char* name, GLfloat _value);
 	void scaleObject(float _size);
+
+	// Uniform tools
+	void addIntegerUniform(const char* _name, GLuint _value);
+	void addFloatUniform(const char* _name, GLfloat _value);
+	void addVec3Uniform(const char* _name, GLfloat* _value);
+	void addMat4Uniform(const char* _name, GLfloat* _value);
+	void addTextureUniform(GLuint _texUnit, GLuint _texData, const char* _name, GLfloat _value);
+	void updateFloatUniform(const char* _name, GLfloat _value);
 
 	// Render functions
 	void render();
