@@ -124,14 +124,12 @@ void Mesh::setPosition(float _x, float _y, float _z)
 	modelViewProjectionMatrix = getProjectionMatrix() * getViewMatrix() * modelMatrix;
 }
 
-void Mesh::setDispMap(std::string _filename)
+void Mesh::setDispMap(std::string _filename, int _texHeight, int _texWidth)
 {
 	const char* filename = _filename.c_str();
-	int texHeight = 512;
-	int texWidth  = 512;
-	
+
 	// Load the texture
-	tex_dispMap = png_texture_load(filename, &texWidth , &texHeight);
+	tex_dispMap = png_texture_load(filename, &_texWidth , &_texHeight);
 	
 	// Get a handle for our "dispMap" uniform
 	handle_dispMap = glGetUniformLocation(programID, "dispMap");
@@ -139,14 +137,12 @@ void Mesh::setDispMap(std::string _filename)
 	addTextureUniform(GL_TEXTURE0, tex_dispMap, "dispMap", 0);
 }
 
-void Mesh::setNormMap(std::string _filename)
+void Mesh::setNormMap(std::string _filename, int _texHeight, int _texWidth)
 {
 	const char* filename = _filename.c_str();
-	int texHeight = 512;
-	int texWidth  = 512;
 	
 	// Load the texture
-	tex_normMap = png_texture_load(filename, &texWidth , &texHeight);
+	tex_normMap = png_texture_load(filename, &_texWidth , &_texHeight);
 	
 	// Get a handle for our "dispMap" uniform
 	handle_normMap = glGetUniformLocation(programID, "normMap");
@@ -154,14 +150,12 @@ void Mesh::setNormMap(std::string _filename)
 	addTextureUniform(GL_TEXTURE1, tex_normMap, "normMap", 1);
 }
 
-void Mesh::setColorMap(std::string _filename)
+void Mesh::setColorMap(std::string _filename, int _texHeight, int _texWidth)
 {
 	const char* filename = _filename.c_str();
-	int texHeight = 512;
-	int texWidth  = 512;
 	
 	// Load the texture
-	tex_colorMap = png_texture_load(filename, &texWidth , &texHeight);
+	tex_colorMap = png_texture_load(filename, &_texWidth , &_texHeight);
 	
 	// Set the handle for the "dispMap" uniform
 	handle_colorMap = glGetUniformLocation(programID, "colorMap");

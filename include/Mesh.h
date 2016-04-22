@@ -75,9 +75,9 @@ public:
 	void render();
 
 	// Texture functions
-	void setDispMap(std::string _filename);
-	void setNormMap(std::string _filename);
-	void setColorMap(std::string _filename);
+	void setDispMap(std::string _filename, int _texHeight, int _texWidth);
+	void setNormMap(std::string _filename, int _texHeight, int _texWidth);
+	void setColorMap(std::string _filename, int _texHeight, int _texWidth);
 	void setIsTessellationActive(bool _tessellation){tessellation = _tessellation;};
 	GLuint png_texture_load(const char * file_name, int * width, int * height);
 
