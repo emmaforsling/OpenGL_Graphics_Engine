@@ -28,6 +28,8 @@ void magicTwMouseButtonWrapper(GLFWwindow *, int, int, int);
 void magicTwMouseHoverWrapper(GLFWwindow *, double, double);
 void myFunction(void *clientData);
 
+void updateTweakBar(void);
+
 // Variables
 GLFWwindow* window;
 Scene* scene;
@@ -47,7 +49,7 @@ int main(void)
 	printf("Supported GLSL version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 	
 	// Initialize the scene
-	//initScene();
+	initScene();
 
 	// Initialize the AntTweakBar window 
 	initAntTweakBar();
@@ -55,7 +57,19 @@ int main(void)
 	// Render the window
 	do
 	{
+		// Clear the screen and depth buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		updateTweakBar();
+
 		scene->render(window);
+
+		// Render the AntTweakBar (after the meshes)
+		TwDraw();
+
+		// Swap buffers
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	} // Check if the ESC key was pressed or the window was closed
 	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
 		   glfwWindowShouldClose(window) == 0 );
@@ -116,12 +130,15 @@ bool initScene(void)
 	// Initialize scene
 	scene = new Scene();
 
+	int texHeight = 1024;
+	int texWidth  = 1024;
+
 	// Create and add a mesh to the scene
 	Mesh* tempMesh1 = new Mesh();
 	tempMesh1->initShaders("shaders/vertexshader.glsl", "shaders/fragmentshader.glsl");
 	// tempMesh1->setProgramID(LoadShaders("shaders/vertexshader.glsl", "shaders/fragmentshader.glsl"));
 	tempMesh1->initOBJ("assets/susanne.obj");
-	tempMesh1->setTexture("assets/textures/monkey_tex.png");
+	tempMesh1->setColorMap("assets/textures/monkey_tex.png",texHeight, texWidth);
 	tempMesh1->setMaterialProperties(0.85, 0.15, 10.0);	// diffuse and specular coeff, specular power
 	tempMesh1->setPosition(-1.5, 0.0, 0.0);
 	scene->addMesh(tempMesh1);
@@ -130,7 +147,7 @@ bool initScene(void)
 	Mesh* tempMesh2 = new Mesh();
 	tempMesh2->initShaders("shaders/vertexshader.glsl", "shaders/fragmentshader.glsl");
 	tempMesh2->initOBJ("assets/sphere.obj");
-	tempMesh2->setTexture("assets/textures/bunny_tex.png");
+	tempMesh2->setColorMap("assets/textures/bunny_tex.png",texHeight, texWidth);
 	tempMesh2->setMaterialProperties(0.50, 0.50, 40.0);	// diffuse and specular coeff, specular power
 	tempMesh2->setPosition(2.0, 0.0, 0.0);
 	scene->addMesh(tempMesh2);
@@ -207,6 +224,12 @@ void magicTwMouseButtonWrapper(GLFWwindow* window, int button, int action, int m
 void magicTwMouseHoverWrapper(GLFWwindow * window, double x, double y)
 {
     TwEventMousePosGLFW(x * 2, y * 2);
+}
+
+void updateTweakBar(void)
+{
+	// Call the setFunctions for those uniform variables 
+	// that you want to be updated! 
 }
 
 /****************************** </AntTweakBar> *********************************/
