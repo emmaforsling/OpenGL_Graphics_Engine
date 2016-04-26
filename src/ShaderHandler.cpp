@@ -16,7 +16,7 @@ ShaderHandler::ShaderHandler(	const char* _vertex_file_path,
 	// Loop through the added shaders and load and compile them.
 	for(int i = 0; i < shaders.size(); ++i)
 	{
-		loadShader(shaders[i].file_path, shaders[i].shaderID);
+		loadShader(shaders[i].file_path, shaders[i].shader_type);
 	}
 }
 
@@ -35,7 +35,7 @@ ShaderHandler::ShaderHandler(	const char* _vertex_file_path,
 	// Loop through the added shaders and load and compile them.
 	for(int i = 0; i < shaders.size(); ++i)
 	{
-		loadShader(shaders[i].file_path, shaders[i].shaderID);
+		loadShader(shaders[i].file_path, shaders[i].shader_type);
 	}
 }
 
@@ -58,7 +58,7 @@ ShaderHandler::ShaderHandler(	const char* _vertex_file_path,
 	// Loop through the added vector, and load and compile them.
 	for(int i = 0; i < shaders.size(); ++i)
 	{
-		loadShader(shaders[i].file_path, shaders[i].shaderID);
+		loadShader(shaders[i].file_path, shaders[i].shader_type);
 	}
 }
 
@@ -69,14 +69,14 @@ void ShaderHandler::initShader(const char* _file_path,GLuint _gl_shader_type)
 {
 	Shader newShader = Shader();
 	newShader.file_path = _file_path;
-	newShader.shaderID = glCreateShader(_gl_shader_type);
+	newShader.shader_type = glCreateShader(_gl_shader_type);
 	shaders.push_back(newShader);
 }
 
 /**
 * Function that loads and compiles a shader
 **/
-void ShaderHandler::loadShader(const char* _file_path, GLuint _shaderID)
+void ShaderHandler::loadShader(const char* _file_path, GLuint _shader_type)
 {
 	std::string shaderCode;
 	std::ifstream shaderStream(_file_path, std::ios::in);
@@ -96,16 +96,16 @@ void ShaderHandler::loadShader(const char* _file_path, GLuint _shaderID)
 	// Compile Shader
 	printf("Compiling shader : %s\n", _file_path);
 	char const * sourcePointer = shaderCode.c_str();
-	glShaderSource(_shaderID, 1, &sourcePointer , NULL);
-	glCompileShader(_shaderID);
+	glShaderSource(_shader_type, 1, &sourcePointer , NULL);
+	glCompileShader(_shader_type);
 
 	// Check Shader
-	glGetShaderiv(_shaderID, GL_COMPILE_STATUS, &Result);
-	glGetShaderiv(_shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	glGetShaderiv(_shader_type, GL_COMPILE_STATUS, &Result);
+	glGetShaderiv(_shader_type, GL_INFO_LOG_LENGTH, &InfoLogLength);
 	if ( InfoLogLength > 0 )
 	{
 		std::vector<char> shaderErrorMessage(InfoLogLength+1);
-		glGetShaderInfoLog(_shaderID, InfoLogLength, NULL, &shaderErrorMessage[0]);
+		glGetShaderInfoLog(_shader_type, InfoLogLength, NULL, &shaderErrorMessage[0]);
 		printf("%s\n", &shaderErrorMessage[0]);
 	}
 }
@@ -118,7 +118,7 @@ void ShaderHandler::deleteShaders()
 	// Loop through the shaders vector and remove them.
 	for(int i = 0; i < shaders.size(); ++i)
 	{
-		glDeleteShader(shaders[i].shaderID);
+		glDeleteShader(shaders[i].shader_type);
 	}
 }
 
@@ -135,7 +135,7 @@ GLuint ShaderHandler::createProgram()
 	// Loop through the added shaders and attach them to the programID
 	for(int i = 0; i < shaders.size(); ++i)
 	{
-		glAttachShader(programID,shaders[i].shaderID);	
+		glAttachShader(programID,shaders[i].shader_type);	
 	}
 	glLinkProgram(programID);
 

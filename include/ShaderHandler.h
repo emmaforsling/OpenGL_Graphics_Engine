@@ -35,18 +35,22 @@ public:
 
 	~ShaderHandler() = default;
 
+	// Function that links the program and returns its programID
 	GLuint createProgram();
+
 private:
-	// Init shader functions that stores their file_path and shaderID in the variable shaders
+	// Functions called from the constructor
 	void initShader(const char* _file_path, GLuint _gl_shader_type);
-	// function called from the constructor
 	void loadShader(const char* file_path, GLuint shaderID);
+	
+	// Delete function that is called in the createProgram() before returning the programID
 	void deleteShaders();
 
+	// Struct Shader, consisting of the file_path and the shader_type
 	struct Shader
 	{
 		const char* file_path;
-		GLuint shaderID;
+		GLuint shader_type;
 	};
 
 	std::vector<Shader> shaders;
