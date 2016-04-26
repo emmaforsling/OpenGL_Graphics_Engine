@@ -21,6 +21,11 @@ public:
 	ShaderHandler(	const char* vertex_file_path, 
 					const char* fragment_file_path);
 	
+	// Geometry Shader Constructor
+	ShaderHandler(	const char* _vertex_file_path,
+					const char* _fragment_file_path,
+					const char* _geometry_file_path);
+
 	// Tessellation Constructor
 	ShaderHandler( 	const char * vertex_file_path,
                    	const char * tessellation_control_file_path,
@@ -30,15 +35,10 @@ public:
 
 	~ShaderHandler() = default;
 
-	// Init shader functions that stores their file_path and shaderID in the variable shaders
-	void initVertexShader(const char* _file_path);
-	void initTessControlShader(const char* _file_path);
-	void initTessEvalShader(const char* _file_path);
-	void initGeometryShader(const char* _file_path);
-	void initFragmentShader(const char* _file_path);
-
 	GLuint createProgram();
 private:
+	// Init shader functions that stores their file_path and shaderID in the variable shaders
+	void initShader(const char* _file_path, GLuint _gl_shader_type);
 	// function called from the constructor
 	void loadShader(const char* file_path, GLuint shaderID);
 	void deleteShaders();

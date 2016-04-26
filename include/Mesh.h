@@ -42,6 +42,11 @@ public:
 	void initShaders(	const char* vertexShader_filename, 
 						const char* fragmentShader_filename);
 
+		// Geometry shader
+	void initShaders(	const char* _vertex_file_path, 
+						const char* _fragment_file_path, 
+						const char* _geometry_file_path);
+	
 		// Tessellation shaders
 	void initShaders(	const char* _vertex_file_path,
                    		const char* _tessellation_control_file_path,
