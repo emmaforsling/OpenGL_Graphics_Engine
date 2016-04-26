@@ -14,8 +14,9 @@
 
 // Source includes
 #include "utils/ObjectLoader.h"
-#include "../include/utils/ShaderManager.h"
 #include "../include/utils/controls.h"
+#include "../include/ShaderHandler.h"
+
 
 // GLM includes
 #include <glm/glm.hpp>
@@ -37,17 +38,21 @@ public:
 	~Mesh();
 
 	// Init functions
-	void initShaders(const char* vertexShader_filename, const char* fragmentShader_filename);
+		// Standard shaders
+	void initShaders(	const char* vertexShader_filename, 
+						const char* fragmentShader_filename);
+
+		// Tessellation shaders
+	void initShaders(	const char* _vertex_file_path,
+                   		const char* _tessellation_control_file_path,
+                   		const char* _tessellation_evaluation_file_path,
+                   		const char* _geometry_file_path,
+                   		const char* _fragment_file_path);
+
+		// Init objects
 	void initCube(float size);
 	void initOBJ(const char* filename);
 
-
-
-	void setProgramID(GLuint _programID){
-		programID = _programID;
-		// Get a handle for our "MVP" uniform
-		MatrixID = glGetUniformLocation(programID, "MVP");
-	};
 	// Get functions
 	GLuint getVertexArrayID(){ return vertexArrayID; };
 	GLuint getVertexbuffer(){ return vertexbuffer; };

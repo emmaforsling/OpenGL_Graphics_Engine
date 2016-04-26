@@ -24,10 +24,30 @@ Mesh::~Mesh()
 	glDeleteVertexArrays(1, &vertexArrayID);
 }
 
-void Mesh::initShaders(const char* vertexShader_filename, const char* fragmentShader_filename)
+void Mesh::initShaders(const char* _vertex_file_path, const char* _fragment_file_path)
 {
 	// Create and compile our GLSL program from the shaders
-	programID = LoadShaders( vertexShader_filename, fragmentShader_filename );
+	ShaderHandler* shader = new ShaderHandler(_vertex_file_path, _fragment_file_path);
+	programID = shader->createProgram();
+
+	// Get a handle for our "MVP" uniform
+	MatrixID = glGetUniformLocation(programID, "MVP");
+}
+
+void Mesh::initShaders( const char* _vertex_file_path,
+                   		const char* _tessellation_control_file_path,
+                   		const char* _tessellation_evaluation_file_path,
+                   		const char* _geometry_file_path,
+                   		const char* _fragment_file_path)
+{
+	// Create and compile our GLSL program from the shaders
+	ShaderHandler* shader = new ShaderHandler(	_vertex_file_path, 
+												_tessellation_control_file_path, 
+												_tessellation_evaluation_file_path,
+												_geometry_file_path,
+												_fragment_file_path);
+	programID = shader->createProgram();
+
 	// Get a handle for our "MVP" uniform
 	MatrixID = glGetUniformLocation(programID, "MVP");
 }

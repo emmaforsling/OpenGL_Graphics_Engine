@@ -14,7 +14,6 @@
 // Source includes
 #include "../include/Camera.h"
 #include "../include/Mesh.h"
-#include "../include/utils/ShaderManager.h"
 #include "../include/utils/controls.h"
 
 class Scene{
