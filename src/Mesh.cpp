@@ -297,6 +297,7 @@ void Mesh::render()
 	glUniformMatrix4fv(glGetUniformLocation(programID, "MVP"), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(programID, "M"), 1, GL_FALSE, &modelMatrix[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(programID, "V"), 1, GL_FALSE, &ViewMatrix[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(programID, "P"), 1, GL_FALSE, &ProjectionMatrix[0][0]);
 
 	// Upload material properties
 	glUniform1f(glGetUniformLocation(programID, "k_diff"), k_diff);
@@ -310,12 +311,12 @@ void Mesh::render()
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
+		0,						// attribute 0. No particular reason for 0, but must match the layout in the shader.
+		3,						// size
+		GL_FLOAT,				// type
+		GL_FALSE,				// normalized?
+		0,						// stride
+		(void*)0				// array buffer offset
 	);
 
 	
@@ -325,12 +326,12 @@ void Mesh::render()
 		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
 		glVertexAttribPointer(
-			1,                  // attribute 1
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_TRUE,            // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
+			1,					// attribute 1
+			3,					// size
+			GL_FLOAT,			// type
+			GL_TRUE,			// normalized?
+			0,					// stride
+			(void*)0			// array buffer offset
 		);
 	}
 
@@ -340,12 +341,12 @@ void Mesh::render()
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 		glVertexAttribPointer(
-			2,                                // attribute 2
-			2,                                // size
-			GL_FLOAT,                         // type
-			GL_FALSE,                         // normalized?
-			0,                                // stride
-			(void*)0                          // array buffer offset
+			2,					// attribute 2
+			2,					// size
+			GL_FLOAT,			// type
+			GL_FALSE,			// normalized?
+			0,					// stride
+			(void*)0			// array buffer offset
 		);
 	}
 
@@ -360,9 +361,10 @@ void Mesh::render()
 		// Draw the triangles!
 		glDrawArrays(GL_TRIANGLES, 0, vertices.size() );	
 	}
-	
 
 	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	//glDisableVertexAttribArray(2);
 
 	// Unbind the texture so that it is not used for other objects as well.
 	glBindTexture(GL_TEXTURE_2D, 0);
