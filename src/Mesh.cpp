@@ -7,7 +7,6 @@ Mesh::Mesh()
 	k_diff = 0.0;
 	k_spec = 0.0;
 	specPow = 0.0;
-	tessScale = 1.0;
 
 	// Initialize model matrix
 	modelMatrix = glm::mat4(1.0);
@@ -57,6 +56,9 @@ void Mesh::initShaders( const char* _vertex_file_path,
 												_geometry_file_path,
 												_fragment_file_path);
 	programID = shader->createProgram();
+
+	// 
+	tessellation = true;
 
 	// Get a handle for our "MVP" uniform
 	MatrixID = glGetUniformLocation(programID, "MVP");
@@ -154,45 +156,10 @@ void Mesh::setPosition(float _x, float _y, float _z)
 	modelViewProjectionMatrix = getProjectionMatrix() * getViewMatrix() * modelMatrix;
 }
 
-void Mesh::setDispMap(std::string _filename, int _texHeight, int _texWidth)
-{
-	const char* filename = _filename.c_str();
-
-	// Load the texture
-	tex_dispMap = png_texture_load(filename, &_texWidth , &_texHeight);
-	
-	// Get a handle for our "dispMap" uniform
-	handle_dispMap = glGetUniformLocation(programID, "dispMap");
-
-	addTextureUniform(GL_TEXTURE0, tex_dispMap, "dispMap", 0);
-}
-
-void Mesh::setNormMap(std::string _filename, int _texHeight, int _texWidth)
-{
-	const char* filename = _filename.c_str();
-	
-	// Load the texture
-	tex_normMap = png_texture_load(filename, &_texWidth , &_texHeight);
-	
-	// Get a handle for our "dispMap" uniform
-	handle_normMap = glGetUniformLocation(programID, "normMap");
-
-	addTextureUniform(GL_TEXTURE1, tex_normMap, "normMap", 1);
-}
-
-void Mesh::setColorMap(std::string _filename, int _texHeight, int _texWidth)
-{
-	const char* filename = _filename.c_str();
-	
-	// Load the texture
-	tex_colorMap = png_texture_load(filename, &_texWidth , &_texHeight);
-	
-	// Set the handle for the "dispMap" uniform
-	handle_colorMap = glGetUniformLocation(programID, "colorMap");
-
-	addTextureUniform(GL_TEXTURE2, tex_colorMap, "colorMap", 2);
-}
-
+/**************************	Uniform tools **************************/
+/**
+*	Function that adds an integer uniform to the shader
+**/
 void Mesh::Mesh::addIntegerUniform(const char* _name, GLuint _value)
 {
 	integerUniform tempUniform = integerUniform();
@@ -201,6 +168,9 @@ void Mesh::Mesh::addIntegerUniform(const char* _name, GLuint _value)
 	integerUniforms.push_back(tempUniform);
 }
 
+/**
+*	Function that adds a float uniform to the shader
+**/
 void Mesh::addFloatUniform(const char* _name, GLfloat _value)
 {
 	floatUniform tempUniform = floatUniform();
@@ -209,6 +179,9 @@ void Mesh::addFloatUniform(const char* _name, GLfloat _value)
 	floatUniforms.push_back(tempUniform);
 }
 
+/**
+*	Function that adds a vec3 uniform to the shader
+**/
 void Mesh::addVec3Uniform(const char* _name, GLfloat* _value)
 {
 	vec3Uniform tempUniform = vec3Uniform();
@@ -217,6 +190,9 @@ void Mesh::addVec3Uniform(const char* _name, GLfloat* _value)
 	vec3Uniforms.push_back(tempUniform);
 }
 
+/**
+*	Function that adds a matrix4x4 uniform to the shader
+**/
 void Mesh::addMat4Uniform(const char* _name, GLfloat* _value)
 {
 	mat4Uniform tempUniform = mat4Uniform();
@@ -225,6 +201,9 @@ void Mesh::addMat4Uniform(const char* _name, GLfloat* _value)
 	mat4Uniforms.push_back(tempUniform);
 }
 
+/**
+*	Function that adds a texture uniform to the shader
+**/
 void Mesh::addTextureUniform(GLuint _texUnit, GLuint _texData, const char* _name, GLfloat _value)
 {
 	textureUniform tempUniform = textureUniform();
@@ -235,6 +214,9 @@ void Mesh::addTextureUniform(GLuint _texUnit, GLuint _texData, const char* _name
 	textureUniforms.push_back(tempUniform);
 }
 
+/**
+*	Function that updates a float uniform 
+**/
 void Mesh::updateFloatUniform(const char* _name, GLfloat _value)
 {
 	for(int i = 0; i < floatUniforms.size(); ++i)
@@ -246,6 +228,23 @@ void Mesh::updateFloatUniform(const char* _name, GLfloat _value)
 	}
 }
 
+/**
+*	Function that updates an integer uniform 
+**/
+void Mesh::updateIntegerUniform(const char* _name, GLuint _value)
+{
+	for(int i = 0; i < integerUniforms.size(); ++i)
+	{
+		if(integerUniforms[i].name == _name)
+		{
+			integerUniforms[i].value = _value;
+		}
+	}
+}
+
+/**
+*	Render function
+**/
 void Mesh::render()
 {
 	// Use our shader
@@ -369,6 +368,47 @@ void Mesh::render()
 	// Unbind the texture so that it is not used for other objects as well.
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+/**************************	Texture functions **************************/
+void Mesh::setDispMap(std::string _filename, int _texHeight, int _texWidth)
+{
+	const char* filename = _filename.c_str();
+
+	// Load the texture
+	tex_dispMap = png_texture_load(filename, &_texWidth , &_texHeight);
+	
+	// Get a handle for our "dispMap" uniform
+	handle_dispMap = glGetUniformLocation(programID, "dispMap");
+
+	addTextureUniform(GL_TEXTURE0, tex_dispMap, "dispMap", 0);
+}
+
+void Mesh::setNormMap(std::string _filename, int _texHeight, int _texWidth)
+{
+	const char* filename = _filename.c_str();
+	
+	// Load the texture
+	tex_normMap = png_texture_load(filename, &_texWidth , &_texHeight);
+	
+	// Get a handle for our "dispMap" uniform
+	handle_normMap = glGetUniformLocation(programID, "normMap");
+
+	addTextureUniform(GL_TEXTURE1, tex_normMap, "normMap", 1);
+}
+
+void Mesh::setColorMap(std::string _filename, int _texHeight, int _texWidth)
+{
+	const char* filename = _filename.c_str();
+	
+	// Load the texture
+	tex_colorMap = png_texture_load(filename, &_texWidth , &_texHeight);
+	
+	// Set the handle for the "dispMap" uniform
+	handle_colorMap = glGetUniformLocation(programID, "colorMap");
+
+	addTextureUniform(GL_TEXTURE2, tex_colorMap, "colorMap", 2);
+}
+
 
 GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
 {

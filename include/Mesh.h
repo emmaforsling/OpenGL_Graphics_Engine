@@ -65,21 +65,21 @@ public:
 	GLuint getUvBuffer(){ return uvbuffer; };
 	int getVerticesLength(){ return vertices.size(); };
 
-	float getTessellationScale(){return tessScale;};
-	void setTessellationScale(float _tessScale){tessScale = _tessScale;};
-
 	// Object operations
 	void setPosition(float _x, float _y, float _z);
 	void setMaterialProperties(float k_diff, float k_spec, float _specPow);
 	void scaleObject(float _size);
 
 	// Uniform tools
+		// Add uniforms
 	void addIntegerUniform(const char* _name, GLuint _value);
 	void addFloatUniform(const char* _name, GLfloat _value);
 	void addVec3Uniform(const char* _name, GLfloat* _value);
 	void addMat4Uniform(const char* _name, GLfloat* _value);
 	void addTextureUniform(GLuint _texUnit, GLuint _texData, const char* _name, GLfloat _value);
+		// Update uniforms
 	void updateFloatUniform(const char* _name, GLfloat _value);
+	void updateIntegerUniform(const char* _name, GLuint _value);
 
 	// Render functions
 	void render();
@@ -88,7 +88,6 @@ public:
 	void setDispMap(std::string _filename, int _texHeight, int _texWidth);
 	void setNormMap(std::string _filename, int _texHeight, int _texWidth);
 	void setColorMap(std::string _filename, int _texHeight, int _texWidth);
-	void setIsTessellationActive(bool _tessellation){tessellation = _tessellation;};
 	GLuint png_texture_load(const char * file_name, int * width, int * height);
 
 private:
@@ -160,8 +159,6 @@ private:
 	float specPow;
 
 	// Tesselation
-	float tessScale;
-
 	bool tessellation;
 
 	// Uniform functions
