@@ -4,8 +4,6 @@
 // Standard includes
 #include <iostream>
 #include <vector>
-// #include <map>
-// #include <algorithm>
 #include <png.h>
 
 // OpenGL includes
@@ -16,7 +14,6 @@
 #include "utils/ObjectLoader.h"
 #include "../include/utils/controls.h"
 #include "../include/ShaderHandler.h"
-
 
 // GLM includes
 #include <glm/glm.hpp>

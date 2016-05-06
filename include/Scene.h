@@ -12,7 +12,6 @@
 #include <AntTweakBar.h>
 
 // Source includes
-#include "../include/Camera.h"
 #include "../include/Mesh.h"
 #include "../include/utils/controls.h"
 
@@ -29,11 +28,7 @@ public:
 	// Render
 	void render(GLFWwindow*);
 
-	// Get functions
-	//std::vector<Mesh*> getMeshes(){return meshes;};
-
 private:
-	Camera* camera;
 	std::vector<Mesh *> meshes;
 	GLuint programID;
 	GLuint MatrixID;
