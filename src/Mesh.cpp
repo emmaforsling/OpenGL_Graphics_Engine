@@ -1,5 +1,8 @@
 #include "../include/Mesh.h"
 
+/**
+* Default constructor
+**/
 Mesh::Mesh()
 {
 	// Default values
@@ -12,6 +15,9 @@ Mesh::Mesh()
 	modelMatrix = glm::mat4(1.0);
 }
 
+/**
+* Destructor that cleanups the VBO
+**/
 Mesh::~Mesh()
 {
 	// Cleanup VBO
@@ -23,6 +29,11 @@ Mesh::~Mesh()
 	glDeleteVertexArrays(1, &vertexArrayID);
 }
 
+/**************************	Init functions **************************/
+/**
+*	Function that loads source files and creates a shader program.
+*				(vertex and fragment)
+**/
 void Mesh::initShaders(const char* _vertex_file_path, const char* _fragment_file_path)
 {
 	// Create and compile our GLSL program from the shaders
@@ -33,6 +44,10 @@ void Mesh::initShaders(const char* _vertex_file_path, const char* _fragment_file
 	MatrixID = glGetUniformLocation(programID, "MVP");
 }
 
+/**
+*	Function that loads source files and creates a shader program.
+*				(vertex, fragment and geometry)
+**/
 void Mesh::initShaders(const char* _vertex_file_path, const char* _fragment_file_path, const char* _geometry_file_path)
 {
 	// Create and compile our GLSL program from the shaders
@@ -43,6 +58,10 @@ void Mesh::initShaders(const char* _vertex_file_path, const char* _fragment_file
 	MatrixID = glGetUniformLocation(programID, "MVP");
 }
 
+/**
+*	Function that loads source files and creates a shader program.
+*				(tessellation shader)
+**/
 void Mesh::initShaders( const char* _vertex_file_path,
                    		const char* _tessellation_control_file_path,
                    		const char* _tessellation_evaluation_file_path,
@@ -64,6 +83,9 @@ void Mesh::initShaders( const char* _vertex_file_path,
 	MatrixID = glGetUniformLocation(programID, "MVP");
 }
 
+/**
+*	 Funcion that creates a cube
+**/
 void Mesh::initCube(float size)
 {	
 	// Our vertices. Tree consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
@@ -117,6 +139,9 @@ void Mesh::initCube(float size)
     			 GL_STATIC_DRAW);
 }
 
+/**
+*	Function that loads and creates an object
+**/
 void Mesh::initOBJ(const char* filename)
 {
 	// Read our .obj file
@@ -138,6 +163,7 @@ void Mesh::initOBJ(const char* filename)
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);	
 }
 
+/**************************	Object operations **************************/
 void Mesh::setMaterialProperties(float _k_diff, float _k_spec, float _specPow)
 {
 	k_diff = _k_diff;
@@ -572,6 +598,8 @@ GLuint Mesh::png_texture_load(const char * file_name, int * width, int * height)
     return texture;
 }
 
+
+/**************************	Private uniform functions **************************/
 void Mesh::uploadIntegerUniform(integerUniform _uniform)
 {
 	glUniform1i(glGetUniformLocation(programID, _uniform.name), _uniform.value);

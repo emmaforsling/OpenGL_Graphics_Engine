@@ -37,54 +37,54 @@ public:
 	// Destructor
 	~Mesh();
 
-	// Init functions
-		// Standard shaders
+	/****** Init functions ******/
+	// Standard shaders
 	void initShaders(	const char* vertexShader_filename, 
 						const char* fragmentShader_filename);
 
-		// Geometry shader
+	// Geometry shader
 	void initShaders(	const char* _vertex_file_path, 
 						const char* _fragment_file_path, 
 						const char* _geometry_file_path);
 	
-		// Tessellation shaders
+	// Tessellation shaders
 	void initShaders(	const char* _vertex_file_path,
                    		const char* _tessellation_control_file_path,
                    		const char* _tessellation_evaluation_file_path,
                    		const char* _geometry_file_path,
                    		const char* _fragment_file_path);
 
-		// Init objects
+	// Init objects
 	void initCube(float size);
 	void initOBJ(const char* filename);
 
-	// Get functions
+	/****** Get functions ******/ 
 	GLuint getVertexArrayID(){ return vertexArrayID; };
 	GLuint getVertexbuffer(){ return vertexbuffer; };
 	GLuint getNormalBuffer(){ return normalBuffer; };
 	GLuint getUvBuffer(){ return uvbuffer; };
 	int getVerticesLength(){ return vertices.size(); };
 
-	// Object operations
+	/****** Object operations ******/
 	void setPosition(float _x, float _y, float _z);
 	void setMaterialProperties(float k_diff, float k_spec, float _specPow);
 	void scaleObject(float _size);
 
-	// Uniform tools
-		// Add uniforms
+	/****** Uniform tools ******/ 
+	// Add uniforms
 	void addIntegerUniform(const char* _name, GLuint _value);
 	void addFloatUniform(const char* _name, GLfloat _value);
 	void addVec3Uniform(const char* _name, GLfloat* _value);
 	void addMat4Uniform(const char* _name, GLfloat* _value);
 	void addTextureUniform(GLuint _texUnit, GLuint _texData, const char* _name, GLfloat _value);
-		// Update uniforms
+	// Update uniforms
 	void updateFloatUniform(const char* _name, GLfloat _value);
 	void updateIntegerUniform(const char* _name, GLuint _value);
 
-	// Render functions
+	/****** Render functions ******/
 	void render();
 
-	// Texture functions
+	/****** Texture functions ******/
 	void setDispMap(std::string _filename, int _texHeight, int _texWidth);
 	void setNormMap(std::string _filename, int _texHeight, int _texWidth);
 	void setColorMap(std::string _filename, int _texHeight, int _texWidth);
