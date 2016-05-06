@@ -6,7 +6,7 @@
 Mesh::Mesh()
 {
 	// Default values
-	tessellation = false;
+	tessellationEnabled = false;
 	k_diff = 0.0;
 	k_spec = 0.0;
 	specPow = 0.0;
@@ -77,7 +77,7 @@ void Mesh::initShaders( const char* _vertex_file_path,
 	programID = shader->createProgram();
 
 	// 
-	tessellation = true;
+	tessellationEnabled = true;
 
 	// Get a handle for our "MVP" uniform
 	MatrixID = glGetUniformLocation(programID, "MVP");
@@ -375,7 +375,7 @@ void Mesh::render()
 		);
 	}
 
-	if(tessellation)
+	if(tessellationEnabled)
 	{
 		glPatchParameteri(GL_PATCH_VERTICES, 3);
 		// Draw the patches!

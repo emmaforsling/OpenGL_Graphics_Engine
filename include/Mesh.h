@@ -159,7 +159,7 @@ private:
 	float specPow;
 
 	// Tesselation
-	bool tessellation;
+	bool tessellationEnabled;
 
 	// Uniform functions
 	void uploadIntegerUniform(integerUniform _uniform);
