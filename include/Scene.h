@@ -13,7 +13,7 @@
 
 // Source includes
 #include "../include/Mesh.h"
-#include "../include/utils/controls.h"
+#include "../include/Camera.h"
 
 class Scene{
 public:
@@ -29,6 +29,7 @@ public:
 	void render(GLFWwindow*);
 
 private:
+	Camera* camera;
 	std::vector<Mesh *> meshes;
 	GLuint programID;
 	GLuint MatrixID;

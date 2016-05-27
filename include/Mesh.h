@@ -12,7 +12,7 @@
 
 // Source includes
 #include "utils/ObjectLoader.h"
-#include "../include/utils/controls.h"
+#include "../include/Camera.h"
 #include "../include/ShaderHandler.h"
 
 // GLM includes
@@ -79,7 +79,7 @@ public:
 	void updateIntegerUniform(const char* _name, GLuint _value);
 
 	/****** Render functions ******/
-	void render();
+	void render(Camera* camera);
 
 	/****** Texture functions ******/
 	void setDispMap(std::string _filename, int _texHeight, int _texWidth);

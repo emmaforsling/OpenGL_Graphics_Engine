@@ -179,7 +179,7 @@ void Mesh::scaleObject(float _scale)
 void Mesh::setPosition(float _x, float _y, float _z)
 {
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(_x, _y, _z));
-	modelViewProjectionMatrix = getProjectionMatrix() * getViewMatrix() * modelMatrix;
+	//modelViewProjectionMatrix = getProjectionMatrix() * getViewMatrix() * modelMatrix;
 }
 
 /**************************	Uniform tools **************************/
@@ -271,15 +271,17 @@ void Mesh::updateIntegerUniform(const char* _name, GLuint _value)
 /**
 *	Render function
 **/
-void Mesh::render()
+void Mesh::render(Camera* camera)
 {
 	// Use our shader
 	glUseProgram(programID);
 
+	modelViewProjectionMatrix = camera->getProjectionMatrix() * camera->getViewMatrix() * modelMatrix;
+
 	// Compute the MVP matrix from keyboard and mouse input
-	computeMatricesFromInputs();
-	glm::mat4 ProjectionMatrix = getProjectionMatrix();
-	glm::mat4 ViewMatrix = getViewMatrix();
+	camera->computeMatricesFromInputs();
+	glm::mat4 ProjectionMatrix = camera->getProjectionMatrix();
+	glm::mat4 ViewMatrix = camera->getViewMatrix();
 	modelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * modelMatrix;
 
 	// Upload integer uniforms
@@ -330,7 +332,7 @@ void Mesh::render()
 	glUniform1f(glGetUniformLocation(programID, "specPow"), specPow);
 	
 	// Upload camera position
-	glUniform3fv(glGetUniformLocation(programID, "cameraPos_ws"), 1, glm::value_ptr(getCameraPosition()));
+	glUniform3fv(glGetUniformLocation(programID, "cameraPos_ws"), 1, glm::value_ptr(camera->getCameraPosition()));
 
 	// 1st attribute buffer : vertices
 	glEnableVertexAttribArray(0);

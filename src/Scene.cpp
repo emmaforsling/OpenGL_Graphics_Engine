@@ -3,7 +3,7 @@
 Scene::Scene()
 {
 	// Create camera
-	//camera = new Camera();
+	camera = new Camera();
 
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
@@ -47,6 +47,6 @@ void Scene::render(GLFWwindow* window)
 	// Render all meshes
 	for(int i = 0; i < meshes.size(); ++i)
 	{
-		meshes[i]->render();
+		meshes[i]->render(camera);
 	}
 }
