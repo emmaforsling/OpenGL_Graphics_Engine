@@ -9,7 +9,8 @@ bool loadObj(
     std::vector<glm::vec3> & out_vertices,
     std::vector<glm::vec2> & out_uvs,
     std::vector<glm::vec3> & out_normals
-) {
+) 
+{
 	printf("Loading OBJ file %s...\n", path);
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
@@ -20,55 +21,80 @@ bool loadObj(
 	//path = "character.obj";
 
 	FILE * file = fopen(path, "r");
+	// Check if the file exists and can be opened
 	if ( file == NULL ) {
 
-		printf("Impossible to open the file ! Are you in the right path ? See Tutorial 1 for details\n");
+		printf("Impossible to open the file ! Are you in the right path?\n");
 		getchar();
 		return false;
 	}
-
 	while ( 1 ) {
 
 		char lineHeader[128];
+		
 		// read the first word of the line
 		int res = fscanf(file, "%s", lineHeader);
 		if (res == EOF)
 			break; // EOF = End Of File. Quit the loop.
 
-		// else : parse lineHeader
-
-		if ( strcmp( lineHeader, "v" ) == 0 ) {
-
+		/**
+		*	When Reading a .obj file, the following letters are displayed 
+		* 	(representing different properties of the object):
+		*	v 	- a vertex
+		* 	vn 	- a vertex normal
+		* 	vt 	- a texture coordinate of one vertex
+		* 	f 	- a face 
+		**/
+		
+		// Check if the lineheader is equal to v (vertex)
+		// (strcmp - returns zero if the content of both strings are equal)
+		if ( strcmp( lineHeader, "v" ) == 0 )
+		{
+			// Read the vertex positions and store them in the temp_vertices
 			glm::vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
 			temp_vertices.push_back(vertex);
 
-		} else if ( strcmp( lineHeader, "vt" ) == 0 ) {
-
+		}
+		// Check if the lineheader is equal to vt (texture coordinate)
+		else if ( strcmp( lineHeader, "vt" ) == 0 )
+		{
+			// Read the uv coordinates and store them in temp_uvs
 			glm::vec2 uv;
 			fscanf(file, "%f %f\n", &uv.x, &uv.y );
 			//uv.y = -uv.y; // Invert V coordinate since we will only use DDS texture, which are inverted. Remove if you want to use TGA or BMP loaders.
 			temp_uvs.push_back(uv);
 
-		} else if ( strcmp( lineHeader, "vn" ) == 0 ) {
-
+		}
+		// Check if the lineheader is equal to vn (vertex normal)
+		else if ( strcmp( lineHeader, "vn" ) == 0 )
+		{
+			// Read the vertex normal and store it in temp_normals
 			glm::vec3 normal;
 			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
 			temp_normals.push_back(normal);
 
-		} else if ( strcmp( lineHeader, "f" ) == 0 ) {
+		}
+		// Check if the lineheader is equal to f (face)
+		else if ( strcmp( lineHeader, "f" ) == 0 )
+		{
 
 			std::string vertex1, vertex2, vertex3;
 			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-
+			// Read the face content
+			int matches = fscanf(	file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", 
+									&vertexIndex[0], &uvIndex[0], &normalIndex[0], 
+									&vertexIndex[1], &uvIndex[1], &normalIndex[1], 
+									&vertexIndex[2], &uvIndex[2], &normalIndex[2] 
+								);
+			// If some content are missing
 			if (matches != 9) {
 
 				printf("matches: %i", matches);
 				printf("File can't be read by our simple parser :-( Try exporting with other options\n");
 				return false;
 			}
-
+			// Otherwise, store the content in vertexIndices, uvIndices and normalIndices
 			vertexIndices.push_back(vertexIndex[0]);
 			vertexIndices.push_back(vertexIndex[1]);
 			vertexIndices.push_back(vertexIndex[2]);
@@ -79,8 +105,9 @@ bool loadObj(
 			normalIndices.push_back(normalIndex[1]);
 			normalIndices.push_back(normalIndex[2]);
 
-		} else {
-
+		}
+		else
+		{
 			// Probably a comment, eat up the rest of the line
 			char stupidBuffer[1000];
 			fgets(stupidBuffer, 1000, file);
