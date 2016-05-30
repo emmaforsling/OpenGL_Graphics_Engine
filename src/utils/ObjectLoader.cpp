@@ -4,12 +4,11 @@
 
 #include "../../include/utils/ObjectLoader.h"
 // Loads vertices, UVs and normals
-bool loadObj(
-    const char * path,
-    std::vector<glm::vec3> & out_vertices,
-    std::vector<glm::vec2> & out_uvs,
-    std::vector<glm::vec3> & out_normals
-) 
+bool loadObj(	const char * path,
+    			std::vector<glm::vec3> & out_vertices,
+    			std::vector<glm::vec2> & out_uvs,
+    			std::vector<glm::vec3> & out_normals
+			) 
 {
 	printf("Loading OBJ file %s...\n", path);
 
@@ -112,11 +111,11 @@ bool loadObj(
 			char stupidBuffer[1000];
 			fgets(stupidBuffer, 1000, file);
 		}
-
 	}
 
 	// For each vertex of each triangle
-	for ( unsigned int i = 0; i < vertexIndices.size(); i++ ) {
+	for ( unsigned int i = 0; i < vertexIndices.size(); i++ )
+	{
 
 		// Get the indices of its attributes
 		unsigned int vertexIndex = vertexIndices[i];
